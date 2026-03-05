@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useInView } from './hooks/useInView';
 import { useLanguage } from '../context/LanguageContext';
+import parqueLogo from '../../Assets/Logos/logo_parque_dos_principes_dourado.png';
 
 const translations = {
   PT: {
@@ -85,9 +86,7 @@ export function GallerySection({ images }: GallerySectionProps) {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="bg-[#2D6B79] p-8 flex flex-col justify-center items-center text-center"
           >
-            <div className="w-16 h-16 bg-[#C9A84C] mb-6 flex items-center justify-center" style={{ fontFamily: 'Playfair Display, serif' }}>
-              <span className="text-[#1B2A3B] font-bold text-2xl">NP</span>
-            </div>
+            <img src={parqueLogo} alt="Parque dos Príncipes" className="h-16 w-auto object-contain mb-6" />
             <p
               className="text-[#F5F0E8]/90"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', lineHeight: '1.6' }}
