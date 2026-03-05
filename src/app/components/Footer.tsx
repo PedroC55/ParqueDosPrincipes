@@ -1,4 +1,6 @@
 import { useLanguage } from '../context/LanguageContext';
+import gestaoLogo from '../../Assets/Logos/logo_gestao_do_condado_dourado.png';
+import parqueLogo from '../../Assets/Logos/logo_parque_dos_principes_dourado.png';
 
 const translations = {
   PT: {
@@ -19,9 +21,7 @@ export function Footer() {
       {/* Upper Band - Project Logo */}
       <div className="bg-[#2D6B79] py-12">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12 flex justify-center">
-          <div className="w-20 h-20 bg-[#C9A84C] flex items-center justify-center" style={{ fontFamily: 'Playfair Display, serif' }}>
-            <span className="text-[#1B2A3B] font-bold text-3xl">NP</span>
-          </div>
+          <img src={parqueLogo} alt="Parque dos Príncipes" className="h-20 w-auto object-contain" />
         </div>
       </div>
 
@@ -30,17 +30,7 @@ export function Footer() {
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
           <div className="flex flex-col items-center gap-6">
             {/* Developer Logo */}
-            <div className="w-16 h-16 bg-[#C9A84C] flex items-center justify-center" style={{ fontFamily: 'Playfair Display, serif' }}>
-              <span className="text-[#1B2A3B] font-bold text-2xl">GC</span>
-            </div>
-
-            {/* Developer Name */}
-            <h3
-              className="text-[#F5F0E8] text-center"
-              style={{ fontFamily: 'Playfair Display, serif', fontSize: '20px', fontWeight: 600 }}
-            >
-              Gestão do Condado
-            </h3>
+            <img src={gestaoLogo} alt="Gestão do Condado" className="h-24 w-auto object-contain" />
 
             {/* Disclaimer */}
             <p

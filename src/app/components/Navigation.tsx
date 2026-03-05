@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import parqueLogo from '../../Assets/Logos/logo_parque_dos_principes_dourado.png';
 
 const navTranslations = {
   PT: { contacts: 'CONTACTOS', development: 'PARQUE DOS PRÍNCIPES', promotora: 'PROMOTORA', video: 'VIDEO' },
@@ -39,9 +40,7 @@ export function Navigation() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-[#C9A84C] flex items-center justify-center" style={{ fontFamily: 'Playfair Display, serif' }}>
-              <span className="text-[#1B2A3B] font-bold text-xl">NP</span>
-            </div>
+            <img src={parqueLogo} alt="Parque dos Príncipes" className="h-12 w-auto object-contain" />
           </div>
 
           {/* Desktop Navigation */}

@@ -1,6 +1,8 @@
 import { motion } from 'motion/react';
 import { useInView } from './hooks/useInView';
 import { useLanguage } from '../context/LanguageContext';
+import madreLogo from '../../Assets/Logos/logo_madre_development.png';
+import gestaoLogo from '../../Assets/Logos/logo_gestao_do_condado_dourado.png';
 
 const translations = {
   PT: {
@@ -58,15 +60,7 @@ export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
           {/* Madre Development */}
           <div>
             <div className="mb-6">
-              <div className="w-16 h-16 bg-[#C9A84C] flex items-center justify-center mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
-                <span className="text-[#1B2A3B] font-bold text-xl">MD</span>
-              </div>
-              <h3
-                className="text-[#F5F0E8]"
-                style={{ fontFamily: 'Playfair Display, serif', fontSize: '26px', fontWeight: 600 }}
-              >
-                Madre Development
-              </h3>
+              <img src={madreLogo} alt="Madre Development" className="h-16 w-auto object-contain mb-4" />
             </div>
             <p
               className="text-[#F5F0E8]/80 leading-relaxed"
@@ -82,15 +76,7 @@ export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
           {/* Gestão do Condado */}
           <div>
             <div className="mb-6">
-              <div className="w-16 h-16 bg-[#C9A84C] flex items-center justify-center mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
-                <span className="text-[#1B2A3B] font-bold text-xl">GC</span>
-              </div>
-              <h3
-                className="text-[#F5F0E8]"
-                style={{ fontFamily: 'Playfair Display, serif', fontSize: '26px', fontWeight: 600 }}
-              >
-                Gestão do Condado
-              </h3>
+              <img src={gestaoLogo} alt="Gestão do Condado" className="h-24 w-auto object-contain mb-4" />
             </div>
             <p
               className="text-[#F5F0E8]/80 leading-relaxed"

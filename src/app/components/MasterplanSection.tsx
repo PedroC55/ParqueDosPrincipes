@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { useInView } from './hooks/useInView';
 import { useLanguage } from '../context/LanguageContext';
+import parqueLogo from '../../Assets/Logos/logo_parque_dos_principes_dourado.png';
 
 const translations = {
   PT: {
@@ -60,9 +61,7 @@ export function MasterplanSection({ planImage }: MasterplanSectionProps) {
           >
             {/* Logo */}
             <div className="flex justify-center lg:justify-start mb-12">
-              <div className="w-20 h-20 bg-[#C9A84C] flex items-center justify-center" style={{ fontFamily: 'Playfair Display, serif' }}>
-                <span className="text-[#1B2A3B] font-bold text-3xl">NP</span>
-              </div>
+              <img src={parqueLogo} alt="Parque dos Príncipes" className="h-20 w-auto object-contain" />
             </div>
 
             {/* Masterplan Heading */}
