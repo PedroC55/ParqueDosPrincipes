@@ -3,6 +3,7 @@ import { Navigation } from './components/Navigation';
 import { HeroSection } from './components/HeroSection';
 import { IntroSection } from './components/IntroSection';
 import { GallerySection } from './components/GallerySection';
+import { VirtualTourSection } from './components/VirtualTourSection';
 import { DevelopmentSection } from './components/DevelopmentSection';
 import { MasterplanSection } from './components/MasterplanSection';
 import { PromotoraSection } from './components/PromotoraSection';
@@ -48,7 +49,9 @@ export default function App() {
       />
       
       <GallerySection images={galleryImages} />
-      
+
+      <VirtualTourSection />
+
       <DevelopmentSection 
         mainImage="https://images.unsplash.com/photo-1565539267708-da4156380dc0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBtb2Rlcm4lMjByZXNpZGVudGlhbCUyMGFuZ29sYSUyMGFmcmljYSUyMGFlcmlhbHxlbnwxfHx8fDE3NzI2NDY2MDd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
         image1="https://images.unsplash.com/photo-1639405069836-f82aa6dcb900?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBraXRjaGVuJTIwaW50ZXJpb3IlMjBsdXh1cnklMjBkZXNpZ258ZW58MXx8fHwxNzcyNjQ2NjA5fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
