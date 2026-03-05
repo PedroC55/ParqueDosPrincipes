@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { LanguageProvider } from './context/LanguageContext';
 import { Navigation } from './components/Navigation';
 import { HeroSection } from './components/HeroSection';
 import { IntroSection } from './components/IntroSection';
@@ -37,6 +38,7 @@ export default function App() {
   };
 
   return (
+    <LanguageProvider>
     <div className="w-full overflow-x-hidden">
       <Navigation />
       
@@ -72,5 +74,6 @@ export default function App() {
       
       <StickyCTA />
     </div>
+    </LanguageProvider>
   );
 }

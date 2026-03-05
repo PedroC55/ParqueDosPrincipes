@@ -1,5 +1,27 @@
 import { motion } from 'motion/react';
 import { useInView } from './hooks/useInView';
+import { useLanguage } from '../context/LanguageContext';
+
+const translations = {
+  PT: {
+    title: 'Masterplan',
+    options: 'Opções: Comfort, Family & Friends',
+    typologies: [
+      { name: 'Garden Residences', types: ['T1', 'T2'], description: 'Apartamentos com acesso direto ao jardim' },
+      { name: 'Sunny Residences', types: ['T1', 'T2'], description: 'Unidades com ampla iluminação natural' },
+      { name: 'Sky Residences', types: ['T1', 'T2'], description: 'Coberturas com vistas panorâmicas' },
+    ],
+  },
+  EN: {
+    title: 'Masterplan',
+    options: 'Options: Comfort, Family & Friends',
+    typologies: [
+      { name: 'Garden Residences', types: ['T1', 'T2'], description: 'Apartments with direct garden access' },
+      { name: 'Sunny Residences', types: ['T1', 'T2'], description: 'Units with ample natural lighting' },
+      { name: 'Sky Residences', types: ['T1', 'T2'], description: 'Penthouses with panoramic views' },
+    ],
+  },
+};
 
 interface MasterplanSectionProps {
   planImage: string;
@@ -7,24 +29,9 @@ interface MasterplanSectionProps {
 
 export function MasterplanSection({ planImage }: MasterplanSectionProps) {
   const [ref, isInView] = useInView({ threshold: 0.2 });
-
-  const typologies = [
-    {
-      name: 'Garden Residences',
-      types: ['T1', 'T2'],
-      description: 'Apartamentos com acesso direto ao jardim',
-    },
-    {
-      name: 'Sunny Residences',
-      types: ['T1', 'T2'],
-      description: 'Unidades com ampla iluminação natural',
-    },
-    {
-      name: 'Sky Residences',
-      types: ['T1', 'T2'],
-      description: 'Coberturas com vistas panorâmicas',
-    },
-  ];
+  const { lang } = useLanguage();
+  const t = translations[lang];
+  const { typologies } = t;
 
   return (
     <section id="masterplan" ref={ref} className="w-full bg-[#F5F0E8] py-16 lg:py-24">
@@ -63,7 +70,7 @@ export function MasterplanSection({ planImage }: MasterplanSectionProps) {
               className="text-[#2C2C2C] mb-12 text-center lg:text-left"
               style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 600 }}
             >
-              Masterplan
+              {t.title}
             </h2>
 
             {/* Typologies */}
@@ -109,7 +116,7 @@ export function MasterplanSection({ planImage }: MasterplanSectionProps) {
                 className="text-[#2C2C2C]/60 text-center lg:text-left"
                 style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', fontStyle: 'italic' }}
               >
-                Opções: Comfort, Family & Friends
+                {t.options}
               </p>
             </motion.div>
           </motion.div>

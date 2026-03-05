@@ -1,11 +1,27 @@
 import { ChevronDown, Calendar } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useLanguage } from '../context/LanguageContext';
+
+const translations = {
+  PT: {
+    label: 'WELCOME',
+    title: 'Uma nova forma de viver em Luanda',
+    subtitle: 'Descubra o empreendimento residencial mais exclusivo de Camama, onde o luxo encontra o conforto.',
+  },
+  EN: {
+    label: 'WELCOME',
+    title: 'A new way of living in Luanda',
+    subtitle: 'Discover the most exclusive residential development in Camama, where luxury meets comfort.',
+  },
+};
 
 interface HeroSectionProps {
   backgroundImage: string;
 }
 
 export function HeroSection({ backgroundImage }: HeroSectionProps) {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const scrollToNext = () => {
     const element = document.getElementById('intro');
     if (element) {
@@ -45,19 +61,19 @@ export function HeroSection({ backgroundImage }: HeroSectionProps) {
             className="text-[#C9A84C] mb-6 tracking-[0.2em]"
             style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
           >
-            WELCOME
+            {t.label}
           </div>
           <h1
             className="text-[#F5F0E8] mb-6 leading-tight"
             style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2.5rem, 6vw, 5rem)', fontWeight: 600 }}
           >
-            Uma nova forma de viver em Luanda
+            {t.title}
           </h1>
           <p
             className="text-[#F5F0E8]/90 max-w-xl mb-8"
             style={{ fontFamily: 'Lato, sans-serif', fontSize: '18px', lineHeight: '1.8', fontWeight: 300 }}
           >
-            Descubra o empreendimento residencial mais exclusivo de Camama, onde o luxo encontra o conforto.
+            {t.subtitle}
           </p>
         </motion.div>
 

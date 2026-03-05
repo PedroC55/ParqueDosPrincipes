@@ -1,5 +1,19 @@
 import { motion } from 'motion/react';
 import { useInView } from './hooks/useInView';
+import { useLanguage } from '../context/LanguageContext';
+
+const translations = {
+  PT: {
+    label: 'PROMOTORA',
+    madreDesc: 'Especializada em desenvolvimento imobiliário de alto padrão, a Madre Development traz ao mercado angolano projetos que combinam inovação, sustentabilidade e design excepcional. Nossa missão é criar espaços que transformam vidas.',
+    gestaoDesc: 'A Gestão do Condado, Participações Sociais, Lda é uma empresa angolana com vasta experiência no setor imobiliário. Com foco em excelência e compromisso com a qualidade, desenvolvemos projetos que se destacam no mercado.',
+  },
+  EN: {
+    label: 'DEVELOPER',
+    madreDesc: 'Specialized in high-end real estate development, Madre Development brings to the Angolan market projects that combine innovation, sustainability and exceptional design. Our mission is to create spaces that transform lives.',
+    gestaoDesc: 'Gestão do Condado, Participações Sociais, Lda is an Angolan company with extensive experience in the real estate sector. With a focus on excellence and commitment to quality, we develop projects that stand out in the market.',
+  },
+};
 
 interface PromotoraSectionProps {
   interiorImage: string;
@@ -7,6 +21,8 @@ interface PromotoraSectionProps {
 
 export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
   const [ref, isInView] = useInView({ threshold: 0.2 });
+  const { lang } = useLanguage();
+  const t = translations[lang];
 
   return (
     <section id="promotora" ref={ref} className="w-full grid lg:grid-cols-2">
@@ -35,7 +51,7 @@ export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
           className="text-[#C9A84C] mb-8 tracking-[0.2em]"
           style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
         >
-          PROMOTORA
+          {t.label}
         </div>
 
         <div className="space-y-12">
@@ -56,9 +72,7 @@ export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
               className="text-[#F5F0E8]/80 leading-relaxed"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px', lineHeight: '1.8' }}
             >
-              Especializada em desenvolvimento imobiliário de alto padrão, a Madre Development
-              traz ao mercado angolano projetos que combinam inovação, sustentabilidade e design
-              excepcional. Nossa missão é criar espaços que transformam vidas.
+              {t.madreDesc}
             </p>
           </div>
 
@@ -82,9 +96,7 @@ export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
               className="text-[#F5F0E8]/80 leading-relaxed"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px', lineHeight: '1.8' }}
             >
-              A Gestão do Condado, Participações Sociais, Lda é uma empresa angolana com vasta
-              experiência no setor imobiliário. Com foco em excelência e compromisso com a
-              qualidade, desenvolvemos projetos que se destacam no mercado.
+              {t.gestaoDesc}
             </p>
           </div>
         </div>

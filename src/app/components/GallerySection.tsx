@@ -2,6 +2,22 @@ import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useInView } from './hooks/useInView';
+import { useLanguage } from '../context/LanguageContext';
+
+const translations = {
+  PT: {
+    label: 'GALERIA',
+    title: 'Explore o Projeto',
+    subtitle: 'Descubra os espaços exclusivos do nosso empreendimento',
+    categories: ['EXTERIOR', 'INTERIOR', 'AMENIDADES', 'VISTAS'],
+  },
+  EN: {
+    label: 'GALLERY',
+    title: 'Explore the Project',
+    subtitle: 'Discover the exclusive spaces of our development',
+    categories: ['EXTERIOR', 'INTERIOR', 'AMENITIES', 'VIEWS'],
+  },
+};
 
 interface GallerySectionProps {
   images: {
@@ -16,12 +32,14 @@ export function GallerySection({ images }: GallerySectionProps) {
   const [ref, isInView] = useInView({ threshold: 0.2 });
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const { lang } = useLanguage();
+  const t = translations[lang];
 
   const categories = [
-    { name: 'EXTERIOR', images: images.exterior },
-    { name: 'INTERIOR', images: images.interior },
-    { name: 'AMENIDADES', images: images.amenities },
-    { name: 'VISTAS', images: images.views },
+    { name: t.categories[0], images: images.exterior },
+    { name: t.categories[1], images: images.interior },
+    { name: t.categories[2], images: images.amenities },
+    { name: t.categories[3], images: images.views },
   ];
 
   const handlePrev = () => {
@@ -49,13 +67,13 @@ export function GallerySection({ images }: GallerySectionProps) {
             className="text-[#C9A84C] mb-4 tracking-[0.2em]"
             style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
           >
-            GALERIA
+            {t.label}
           </div>
           <h2
             className="text-[#F5F0E8]"
             style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 600 }}
           >
-            Explore o Projeto
+            {t.title}
           </h2>
         </motion.div>
 
@@ -74,7 +92,7 @@ export function GallerySection({ images }: GallerySectionProps) {
               className="text-[#F5F0E8]/90"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', lineHeight: '1.6' }}
             >
-              Descubra os espaços exclusivos do nosso empreendimento
+              {t.subtitle}
             </p>
           </motion.div>
 

@@ -1,5 +1,23 @@
 import { motion } from 'motion/react';
 import { useInView } from './hooks/useInView';
+import { useLanguage } from '../context/LanguageContext';
+
+const translations = {
+  PT: {
+    label: 'CAMAMA',
+    title: 'No Coração de Luanda',
+    p1: 'Localizado em Camama, uma das áreas mais promissoras de Luanda, este empreendimento oferece uma localização estratégica com fácil acesso aos principais pontos da cidade.',
+    p2: 'Com infraestrutura moderna e completa, o projeto combina elegância, funcionalidade e segurança, proporcionando um estilo de vida único para você e sua família.',
+    p3: 'Um novo conceito de residência que valoriza cada detalhe, desde o design arquitetônico até os acabamentos premium, criando espaços que inspiram conforto e sofisticação.',
+  },
+  EN: {
+    label: 'CAMAMA',
+    title: 'In the Heart of Luanda',
+    p1: 'Located in Camama, one of the most promising areas of Luanda, this development offers a strategic location with easy access to the city\'s main points.',
+    p2: 'With modern and complete infrastructure, the project combines elegance, functionality and security, providing a unique lifestyle for you and your family.',
+    p3: 'A new concept of residence that values every detail, from the architectural design to the premium finishes, creating spaces that inspire comfort and sophistication.',
+  },
+};
 
 interface IntroSectionProps {
   aerialImage: string;
@@ -7,6 +25,8 @@ interface IntroSectionProps {
 
 export function IntroSection({ aerialImage }: IntroSectionProps) {
   const [ref, isInView] = useInView({ threshold: 0.2 });
+  const { lang } = useLanguage();
+  const t = translations[lang];
 
   return (
     <section
@@ -25,30 +45,21 @@ export function IntroSection({ aerialImage }: IntroSectionProps) {
           className="text-[#C9A84C] mb-6 tracking-[0.2em]"
           style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
         >
-          CAMAMA
+          {t.label}
         </div>
         <h2
           className="text-[#2C2C2C] mb-8 leading-tight"
           style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 600 }}
         >
-          No Coração de Luanda
+          {t.title}
         </h2>
         <div
           className="text-[#2C2C2C]/80 space-y-4"
           style={{ fontFamily: 'Lato, sans-serif', fontSize: '16px', lineHeight: '1.8' }}
         >
-          <p>
-            Localizado em Camama, uma das áreas mais promissoras de Luanda, este empreendimento oferece
-            uma localização estratégica com fácil acesso aos principais pontos da cidade.
-          </p>
-          <p>
-            Com infraestrutura moderna e completa, o projeto combina elegância, funcionalidade e segurança,
-            proporcionando um estilo de vida único para você e sua família.
-          </p>
-          <p>
-            Um novo conceito de residência que valoriza cada detalhe, desde o design arquitetônico
-            até os acabamentos premium, criando espaços que inspiram conforto e sofisticação.
-          </p>
+          <p>{t.p1}</p>
+          <p>{t.p2}</p>
+          <p>{t.p3}</p>
         </div>
       </motion.div>
 

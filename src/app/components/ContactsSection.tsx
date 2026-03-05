@@ -2,6 +2,28 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import { useInView } from './hooks/useInView';
 import { Mail } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+
+const translations = {
+  PT: {
+    label: 'CONTACTOS', title: 'Entre em Contacto',
+    nome: 'Nome *', pais: 'País *', telefone: 'Telefone *', email: 'Email *',
+    tipologia: 'Tipologia', preco: 'Faixa de Preço', mensagem: 'Mensagem',
+    select: 'Selecione...',
+    newsletter: 'Desejo receber newsletters e atualizações sobre o projeto',
+    rgpd: 'Li e aceito a Política de Privacidade (RGPD) *',
+    submit: 'Enviar',
+  },
+  EN: {
+    label: 'CONTACTS', title: 'Get in Touch',
+    nome: 'Name *', pais: 'Country *', telefone: 'Phone *', email: 'Email *',
+    tipologia: 'Typology', preco: 'Price Range', mensagem: 'Message',
+    select: 'Select...',
+    newsletter: 'I wish to receive newsletters and project updates',
+    rgpd: 'I have read and accept the Privacy Policy (GDPR) *',
+    submit: 'Send',
+  },
+};
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
@@ -9,6 +31,8 @@ import { Checkbox } from './ui/checkbox';
 
 export function ContactsSection() {
   const [ref, isInView] = useInView({ threshold: 0.2 });
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const [formData, setFormData] = useState({
     nome: '',
     pais: '',
@@ -47,13 +71,13 @@ export function ContactsSection() {
             className="text-[#C9A84C] mb-6 tracking-[0.2em]"
             style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
           >
-            CONTACTOS
+            {t.label}
           </div>
           <h2
             className="text-[#2C2C2C] mb-8"
             style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 600 }}
           >
-            Entre em Contacto
+            {t.title}
           </h2>
 
           {/* Contact Info */}
@@ -76,7 +100,7 @@ export function ContactsSection() {
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="nome" className="text-[#2C2C2C] mb-2 block" style={{ fontFamily: 'Lato, sans-serif' }}>
-                Nome *
+                {t.nome}
               </Label>
               <Input
                 id="nome"
@@ -90,7 +114,7 @@ export function ContactsSection() {
             </div>
             <div>
               <Label htmlFor="pais" className="text-[#2C2C2C] mb-2 block" style={{ fontFamily: 'Lato, sans-serif' }}>
-                País *
+                {t.pais}
               </Label>
               <Input
                 id="pais"
@@ -107,7 +131,7 @@ export function ContactsSection() {
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="telefone" className="text-[#2C2C2C] mb-2 block" style={{ fontFamily: 'Lato, sans-serif' }}>
-                Telefone *
+                {t.telefone}
               </Label>
               <Input
                 id="telefone"
@@ -121,7 +145,7 @@ export function ContactsSection() {
             </div>
             <div>
               <Label htmlFor="email" className="text-[#2C2C2C] mb-2 block" style={{ fontFamily: 'Lato, sans-serif' }}>
-                Email *
+                {t.email}
               </Label>
               <Input
                 id="email"
@@ -138,7 +162,7 @@ export function ContactsSection() {
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="tipologia" className="text-[#2C2C2C] mb-2 block" style={{ fontFamily: 'Lato, sans-serif' }}>
-                Tipologia
+                {t.tipologia}
               </Label>
               <select
                 id="tipologia"
@@ -148,7 +172,7 @@ export function ContactsSection() {
                 className="w-full h-10 px-3 border border-[#2C2C2C]/20 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C9A84C] focus:border-transparent bg-white"
                 style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px' }}
               >
-                <option value="">Selecione...</option>
+                <option value="">{t.select}</option>
                 <option value="T1">T1</option>
                 <option value="T2">T2</option>
                 <option value="T3">T3</option>
@@ -156,7 +180,7 @@ export function ContactsSection() {
             </div>
             <div>
               <Label htmlFor="preco" className="text-[#2C2C2C] mb-2 block" style={{ fontFamily: 'Lato, sans-serif' }}>
-                Faixa de Preço
+                {t.preco}
               </Label>
               <select
                 id="preco"
@@ -166,7 +190,7 @@ export function ContactsSection() {
                 className="w-full h-10 px-3 border border-[#2C2C2C]/20 rounded-md focus:outline-none focus:ring-2 focus:ring-[#C9A84C] focus:border-transparent bg-white"
                 style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px' }}
               >
-                <option value="">Selecione...</option>
+                <option value="">{t.select}</option>
                 <option value="50-100">$50k - $100k</option>
                 <option value="100-200">$100k - $200k</option>
                 <option value="200+">$200k+</option>
@@ -176,7 +200,7 @@ export function ContactsSection() {
 
           <div>
             <Label htmlFor="mensagem" className="text-[#2C2C2C] mb-2 block" style={{ fontFamily: 'Lato, sans-serif' }}>
-              Mensagem
+              {t.mensagem}
             </Label>
             <Textarea
               id="mensagem"
@@ -203,7 +227,7 @@ export function ContactsSection() {
                 className="text-[#2C2C2C]/70 cursor-pointer"
                 style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', lineHeight: '1.6' }}
               >
-                Desejo receber newsletters e atualizações sobre o projeto
+                {t.newsletter}
               </Label>
             </div>
             <div className="flex items-start gap-3">
@@ -220,7 +244,7 @@ export function ContactsSection() {
                 className="text-[#2C2C2C]/70 cursor-pointer"
                 style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', lineHeight: '1.6' }}
               >
-                Li e aceito a Política de Privacidade (RGPD) *
+                {t.rgpd}
               </Label>
             </div>
           </div>
@@ -231,7 +255,7 @@ export function ContactsSection() {
             className="w-full md:w-auto px-12 py-3 bg-[#C9A84C] hover:bg-[#B8963E] text-[#1B2A3B] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
             style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px', fontWeight: 600 }}
           >
-            Enviar
+            {t.submit}
           </button>
         </motion.form>
       </div>

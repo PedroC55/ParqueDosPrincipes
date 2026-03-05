@@ -1,4 +1,19 @@
+import { useLanguage } from '../context/LanguageContext';
+
+const translations = {
+  PT: {
+    disclaimer: 'As imagens utilizadas são meramente ilustrativas e não representam necessariamente o produto final. Todas as informações e especificações estão sujeitas a alterações sem aviso prévio.',
+    privacy: 'Política de Privacidade',
+  },
+  EN: {
+    disclaimer: 'The images used are merely illustrative and do not necessarily represent the final product. All information and specifications are subject to change without prior notice.',
+    privacy: 'Privacy Policy',
+  },
+};
+
 export function Footer() {
+  const { lang } = useLanguage();
+  const t = translations[lang];
   return (
     <footer className="w-full">
       {/* Upper Band - Project Logo */}
@@ -32,9 +47,7 @@ export function Footer() {
               className="text-[#F5F0E8]/60 text-center max-w-2xl"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px', lineHeight: '1.6' }}
             >
-              As imagens utilizadas são meramente ilustrativas e não representam necessariamente
-              o produto final. Todas as informações e especificações estão sujeitas a alterações
-              sem aviso prévio.
+              {t.disclaimer}
             </p>
           </div>
         </div>
@@ -52,7 +65,7 @@ export function Footer() {
               className="hover:text-[#C9A84C] transition-colors"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
             >
-              Política de Privacidade
+              {t.privacy}
             </button>
             <span className="hidden md:inline">|</span>
             <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}>

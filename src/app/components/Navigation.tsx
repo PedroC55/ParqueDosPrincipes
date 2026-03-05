@@ -1,10 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+
+const navTranslations = {
+  PT: { contacts: 'CONTACTOS', development: 'PARQUE DOS PRÍNCIPES', promotora: 'PROMOTORA', video: 'VIDEO' },
+  EN: { contacts: 'CONTACTS', development: 'PARQUE DOS PRÍNCIPES', promotora: 'DEVELOPER', video: 'VIDEO' },
+};
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [language, setLanguage] = useState('PT');
+  const { lang, setLang } = useLanguage();
+  const t = navTranslations[lang];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,34 +51,34 @@ export function Navigation() {
               className="text-[#F5F0E8] hover:text-[#C9A84C] transition-colors tracking-wider"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
             >
-              CONTACTOS
+              {t.contacts}
             </button>
             <button
               onClick={() => scrollToSection('development')}
               className="text-[#F5F0E8] hover:text-[#C9A84C] transition-colors tracking-wider"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
             >
-              PARQUE DOS PRÍNCIPES
+              {t.development}
             </button>
             <button
               onClick={() => scrollToSection('promotora')}
               className="text-[#F5F0E8] hover:text-[#C9A84C] transition-colors tracking-wider"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
             >
-              PROMOTORA
+              {t.promotora}
             </button>
             <button
               onClick={() => scrollToSection('hero')}
               className="text-[#F5F0E8] hover:text-[#C9A84C] transition-colors tracking-wider"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
             >
-              VIDEO
+              {t.video}
             </button>
             <div className="flex items-center gap-2 ml-4">
               <button
-                onClick={() => setLanguage('PT')}
+                onClick={() => setLang('PT')}
                 className={`${
-                  language === 'PT' ? 'text-[#C9A84C]' : 'text-[#F5F0E8]'
+                  lang === 'PT' ? 'text-[#C9A84C]' : 'text-[#F5F0E8]'
                 } hover:text-[#C9A84C] transition-colors tracking-wider`}
                 style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
               >
@@ -79,9 +86,9 @@ export function Navigation() {
               </button>
               <span className="text-[#F5F0E8]">|</span>
               <button
-                onClick={() => setLanguage('EN')}
+                onClick={() => setLang('EN')}
                 className={`${
-                  language === 'EN' ? 'text-[#C9A84C]' : 'text-[#F5F0E8]'
+                  lang === 'EN' ? 'text-[#C9A84C]' : 'text-[#F5F0E8]'
                 } hover:text-[#C9A84C] transition-colors tracking-wider`}
                 style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
               >
@@ -107,34 +114,34 @@ export function Navigation() {
               className="block text-[#F5F0E8] hover:text-[#C9A84C] transition-colors tracking-wider"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
             >
-              CONTACTOS
+              {t.contacts}
             </button>
             <button
               onClick={() => scrollToSection('development')}
               className="block text-[#F5F0E8] hover:text-[#C9A84C] transition-colors tracking-wider"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
             >
-              PARQUE DOS PRÍNCIPES
+              {t.development}
             </button>
             <button
               onClick={() => scrollToSection('promotora')}
               className="block text-[#F5F0E8] hover:text-[#C9A84C] transition-colors tracking-wider"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
             >
-              PROMOTORA
+              {t.promotora}
             </button>
             <button
               onClick={() => scrollToSection('hero')}
               className="block text-[#F5F0E8] hover:text-[#C9A84C] transition-colors tracking-wider"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
             >
-              VIDEO
+              {t.video}
             </button>
             <div className="flex items-center gap-2 pt-4">
               <button
-                onClick={() => setLanguage('PT')}
+                onClick={() => setLang('PT')}
                 className={`${
-                  language === 'PT' ? 'text-[#C9A84C]' : 'text-[#F5F0E8]'
+                  lang === 'PT' ? 'text-[#C9A84C]' : 'text-[#F5F0E8]'
                 } hover:text-[#C9A84C] transition-colors tracking-wider`}
                 style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
               >
@@ -142,9 +149,9 @@ export function Navigation() {
               </button>
               <span className="text-[#F5F0E8]">|</span>
               <button
-                onClick={() => setLanguage('EN')}
+                onClick={() => setLang('EN')}
                 className={`${
-                  language === 'EN' ? 'text-[#C9A84C]' : 'text-[#F5F0E8]'
+                  lang === 'EN' ? 'text-[#C9A84C]' : 'text-[#F5F0E8]'
                 } hover:text-[#C9A84C] transition-colors tracking-wider`}
                 style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
               >

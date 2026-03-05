@@ -2,9 +2,17 @@ import { useRef, useState, useEffect } from 'react';
 import { Maximize2, Minimize2 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useInView } from './hooks/useInView';
+import { useLanguage } from '../context/LanguageContext';
+
+const translations = {
+  PT: { label: 'VISITA VIRTUAL', title: 'Explora as Nossas Instalações', btnTitle: 'Ecrã inteiro', btnExitTitle: 'Sair do ecrã inteiro' },
+  EN: { label: 'VIRTUAL TOUR', title: 'Explore Our Facilities', btnTitle: 'Fullscreen', btnExitTitle: 'Exit fullscreen' },
+};
 
 export function VirtualTourSection() {
   const [ref, isInView] = useInView({ threshold: 0.2 });
+  const { lang } = useLanguage();
+  const t = translations[lang];
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -22,7 +30,7 @@ export function VirtualTourSection() {
     <section
       id="virtual-tour"
       ref={ref}
-      className="w-full bg-[#1C1C1C] py-16 lg:py-24"
+      className="w-full bg-[#1B2A3B] py-16 lg:py-24"
     >
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
         <motion.div
@@ -35,13 +43,13 @@ export function VirtualTourSection() {
             className="text-[#C9A84C] mb-4 tracking-[0.2em]"
             style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
           >
-            VISITA VIRTUAL
+            {t.label}
           </div>
           <h2
             className="text-[#F5F0E8]"
             style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 600 }}
           >
-            Explora as Nossas Instalações em 360°
+            {t.title}
           </h2>
         </motion.div>
 
@@ -61,7 +69,7 @@ export function VirtualTourSection() {
         >
           <iframe
             ref={iframeRef}
-            src="https://critecng.com/hubd/parquedosprincipes/"
+            src={isInView ? "https://critecng.com/hubd/parquedosprincipes/" : undefined}
             width="100%"
             height="100%"
             frameBorder="0"
@@ -70,7 +78,7 @@ export function VirtualTourSection() {
           />
           <button
             onClick={isFullscreen ? handleMinimize : handleFullscreen}
-            title={isFullscreen ? 'Sair do ecrã inteiro' : 'Ecrã inteiro'}
+            title={isFullscreen ? t.btnExitTitle : t.btnTitle}
             style={{
               position: 'absolute',
               top: '12px',

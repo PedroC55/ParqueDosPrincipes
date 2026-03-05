@@ -1,7 +1,9 @@
 import { Calendar } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useLanguage } from '../context/LanguageContext';
 
 export function StickyCTA() {
+  const { lang } = useLanguage();
   const handleClick = () => {
     const element = document.getElementById('contacts');
     if (element) {
@@ -19,7 +21,7 @@ export function StickyCTA() {
       style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', fontWeight: 600 }}
     >
       <Calendar size={18} />
-      <span className="hidden sm:inline">Saber Mais</span>
+      <span className="hidden sm:inline">{lang === 'EN' ? 'Learn More' : 'Saber Mais'}</span>
     </motion.button>
   );
 }
