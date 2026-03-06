@@ -84,7 +84,7 @@ export function ContactsSection() {
           <div className="flex items-center justify-center gap-3 text-[#2C2C2C]/70 mb-12">
             <Mail size={20} className="text-[#C9A84C]" />
             <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}>
-              info@parquedosprincipes.ao
+              parquedosprincipesresidence@gmail.com
             </span>
           </div>
         </motion.div>

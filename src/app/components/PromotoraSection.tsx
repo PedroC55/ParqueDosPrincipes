@@ -1,18 +1,15 @@
 import { motion } from 'motion/react';
 import { useInView } from './hooks/useInView';
 import { useLanguage } from '../context/LanguageContext';
-import madreLogo from '../../Assets/Logos/logo_madre_development.png';
 import gestaoLogo from '../../Assets/Logos/logo_gestao_do_condado_dourado.png';
 
 const translations = {
   PT: {
     label: 'PROMOTORA',
-    madreDesc: 'Especializada em desenvolvimento imobiliário de alto padrão, a Madre Development traz ao mercado angolano projetos que combinam inovação, sustentabilidade e design excepcional. Nossa missão é criar espaços que transformam vidas.',
     gestaoDesc: 'A Gestão do Condado, Participações Sociais, Lda é uma empresa angolana com vasta experiência no setor imobiliário. Com foco em excelência e compromisso com a qualidade, desenvolvemos projetos que se destacam no mercado.',
   },
   EN: {
     label: 'DEVELOPER',
-    madreDesc: 'Specialized in high-end real estate development, Madre Development brings to the Angolan market projects that combine innovation, sustainability and exceptional design. Our mission is to create spaces that transform lives.',
     gestaoDesc: 'Gestão do Condado, Participações Sociais, Lda is an Angolan company with extensive experience in the real estate sector. With a focus on excellence and commitment to quality, we develop projects that stand out in the market.',
   },
 };
@@ -57,22 +54,6 @@ export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
         </div>
 
         <div className="space-y-12">
-          {/* Madre Development */}
-          <div>
-            <div className="mb-6">
-              <img src={madreLogo} alt="Madre Development" className="h-16 w-auto object-contain mb-4" />
-            </div>
-            <p
-              className="text-[#F5F0E8]/80 leading-relaxed"
-              style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px', lineHeight: '1.8' }}
-            >
-              {t.madreDesc}
-            </p>
-          </div>
-
-          {/* Divider */}
-          <div className="h-px bg-[#F5F0E8]/20"></div>
-
           {/* Gestão do Condado */}
           <div>
             <div className="mb-6">

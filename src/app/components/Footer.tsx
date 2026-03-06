@@ -47,10 +47,6 @@ export function Footer() {
       <div className="bg-[#1C1C1C] py-6">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-[#F5F0E8]/50">
-            <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}>
-              2024 © Madre Property Development
-            </span>
-            <span className="hidden md:inline">|</span>
             <button
               className="hover:text-[#C9A84C] transition-colors"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
