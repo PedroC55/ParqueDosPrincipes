@@ -39,7 +39,7 @@ export default function App() {
 
   return (
     <LanguageProvider>
-    <div className="w-full overflow-x-hidden">
+    <div className="w-full" style={{ overflowX: 'clip' }}>
       <Navigation />
 
       <HeroSection backgroundImage={imgEspreguicadeiras} />
@@ -51,7 +51,6 @@ export default function App() {
       <VirtualTourSection />
 
       <DevelopmentSection
-        mainImage={imgHall}
         image1={imgGinasio}
         image2={imgBar}
       />

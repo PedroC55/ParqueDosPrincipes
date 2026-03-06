@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/eduar/.claude/projects/c--Users-eduar-Documents-GitHub-ParqueDosPrincipes/memory/**)"
+    ]
+  }
+}
