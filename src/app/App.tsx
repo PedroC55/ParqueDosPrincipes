@@ -42,7 +42,7 @@ export default function App() {
     <div className="w-full" style={{ overflowX: 'clip' }}>
       <Navigation />
 
-      <HeroSection backgroundImage={imgEspreguicadeiras} />
+      <HeroSection />
 
       <IntroSection aerialImage={imgJardim} />
 

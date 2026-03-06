@@ -1,6 +1,7 @@
 import { ChevronDown, Calendar } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useLanguage } from '../context/LanguageContext';
+import videoLuanda from '../../Assets/video/video_luanda.mp4';
 
 const translations = {
   PT: {
@@ -15,11 +16,7 @@ const translations = {
   },
 };
 
-interface HeroSectionProps {
-  backgroundImage: string;
-}
-
-export function HeroSection({ backgroundImage }: HeroSectionProps) {
+export function HeroSection() {
   const { lang } = useLanguage();
   const t = translations[lang];
   const scrollToNext = () => {
@@ -38,11 +35,14 @@ export function HeroSection({ backgroundImage }: HeroSectionProps) {
 
   return (
     <section id="hero" className="relative h-screen w-full overflow-hidden">
-      {/* Background Image */}
+      {/* Background Video */}
       <div className="absolute inset-0">
-        <img
-          src={backgroundImage}
-          alt="Luxury residential development"
+        <video
+          src={videoLuanda}
+          autoPlay
+          muted
+          loop
+          playsInline
           className="w-full h-full object-cover"
         />
         {/* Gradient Overlay */}
