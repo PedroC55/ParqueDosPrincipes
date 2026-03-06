@@ -13,6 +13,7 @@ import { HeroSection } from './components/HeroSection';
 import { IntroSection } from './components/IntroSection';
 import { GallerySection } from './components/GallerySection';
 import { VirtualTourSection } from './components/VirtualTourSection';
+import { RevealSection } from './components/RevealSection';
 import { DevelopmentSection } from './components/DevelopmentSection';
 import { MasterplanSection } from './components/MasterplanSection';
 import { PromotoraSection } from './components/PromotoraSection';
@@ -47,6 +48,8 @@ export default function App() {
       <IntroSection aerialImage={imgJardim} />
 
       <GallerySection images={galleryImages} />
+
+      <RevealSection />
 
       <VirtualTourSection />
 
