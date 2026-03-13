@@ -4,8 +4,8 @@ import { useLanguage } from '../context/LanguageContext';
 import parqueLogo from '../../Assets/Logos/logo_parque_dos_principes_dourado.png';
 
 const navTranslations = {
-  PT: { contacts: 'CONTACTOS', development: 'PARQUE DOS PRÍNCIPES', promotora: 'PROMOTORA', video: 'VIDEO' },
-  EN: { contacts: 'CONTACTS', development: 'PARQUE DOS PRÍNCIPES', promotora: 'DEVELOPER', video: 'VIDEO' },
+  PT: { virtualTour: 'VISITA VIRTUAL', development: 'PARQUE DOS PRÍNCIPES', promotora: 'PROMOTORA', contacts: 'CONTACTOS' },
+  EN: { virtualTour: 'VIRTUAL TOUR', development: 'PARQUE DOS PRÍNCIPES', promotora: 'DEVELOPER', contacts: 'CONTACTS' },
 };
 
 export function Navigation() {
@@ -46,11 +46,11 @@ export function Navigation() {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
             <button
-              onClick={() => scrollToSection('contacts')}
+              onClick={() => scrollToSection('virtual-tour')}
               className="text-[#F5F0E8] hover:text-[#C9A84C] transition-colors tracking-wider"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
             >
-              {t.contacts}
+              {t.virtualTour}
             </button>
             <button
               onClick={() => scrollToSection('development')}
@@ -67,11 +67,11 @@ export function Navigation() {
               {t.promotora}
             </button>
             <button
-              onClick={() => scrollToSection('hero')}
+              onClick={() => scrollToSection('contacts')}
               className="text-[#F5F0E8] hover:text-[#C9A84C] transition-colors tracking-wider"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
             >
-              {t.video}
+              {t.contacts}
             </button>
             <div className="flex items-center gap-2 ml-4">
               <button
@@ -109,11 +109,11 @@ export function Navigation() {
         {isMobileMenuOpen && (
           <div className="lg:hidden mt-6 pb-4 space-y-4">
             <button
-              onClick={() => scrollToSection('contacts')}
+              onClick={() => scrollToSection('virtual-tour')}
               className="block text-[#F5F0E8] hover:text-[#C9A84C] transition-colors tracking-wider"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
             >
-              {t.contacts}
+              {t.virtualTour}
             </button>
             <button
               onClick={() => scrollToSection('development')}
@@ -130,11 +130,11 @@ export function Navigation() {
               {t.promotora}
             </button>
             <button
-              onClick={() => scrollToSection('hero')}
+              onClick={() => scrollToSection('contacts')}
               className="block text-[#F5F0E8] hover:text-[#C9A84C] transition-colors tracking-wider"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', letterSpacing: '0.1em' }}
             >
-              {t.video}
+              {t.contacts}
             </button>
             <div className="flex items-center gap-2 pt-4">
               <button

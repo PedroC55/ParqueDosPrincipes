@@ -6,7 +6,7 @@ import imgGinasio from '../Assets/Images/ginasio.jpg';
 import imgBar from '../Assets/Images/bar.jpg';
 import imgSalaoJogos from '../Assets/Images/salao_de_jogos.jpg';
 import imgJardim from '../Assets/Images/jardim.jpg';
-import imgMasterplan from '../Assets/Images/masterplan_x4.png';
+import imgMasterplan from '../Assets/Images/masterplan_foto.png';
 import imgHall from '../Assets/Images/hall.jpg';
 import { Navigation } from './components/Navigation';
 import { HeroSection } from './components/HeroSection';
