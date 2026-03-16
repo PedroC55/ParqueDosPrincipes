@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { useInView } from './hooks/useInView';
 import { Mail } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import emailjs from '@emailjs/browser';
 
 const translations = {
   PT: {
@@ -12,7 +13,7 @@ const translations = {
     select: 'Selecione...',
     newsletter: 'Desejo receber newsletters e atualizações sobre o projeto',
     rgpd: 'Li e aceito a Política de Privacidade (RGPD) *',
-    submit: 'Enviar',
+    submit: 'Enviar', sending: 'A enviar...', success: 'Mensagem enviada com sucesso!', error: 'Ocorreu um erro. Tente novamente.',
   },
   EN: {
     label: 'CONTACTS', title: 'Get in Touch',
@@ -21,7 +22,7 @@ const translations = {
     select: 'Select...',
     newsletter: 'I wish to receive newsletters and project updates',
     rgpd: 'I have read and accept the Privacy Policy (GDPR) *',
-    submit: 'Send',
+    submit: 'Send', sending: 'Sending...', success: 'Message sent successfully!', error: 'An error occurred. Please try again.',
   },
 };
 import { Input } from './ui/input';
@@ -44,11 +45,32 @@ export function ContactsSection() {
     newsletter: false,
     rgpd: false,
   });
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Handle form submission
+    setStatus('sending');
+    try {
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          from_name: formData.nome,
+          from_email: formData.email,
+          country: formData.pais,
+          phone: formData.telefone,
+          typology: formData.tipologia,
+          price_range: formData.preco,
+          message: formData.mensagem,
+          newsletter: formData.newsletter ? 'Yes' : 'No',
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+      setStatus('success');
+      setFormData({ nome: '', pais: '', telefone: '', email: '', tipologia: '', preco: '', mensagem: '', newsletter: false, rgpd: false });
+    } catch {
+      setStatus('error');
+    }
   };
 
   const handleChange = (
@@ -83,9 +105,13 @@ export function ContactsSection() {
           {/* Contact Info */}
           <div className="flex items-center justify-center gap-3 text-[#2C2C2C]/70 mb-12">
             <Mail size={20} className="text-[#C9A84C]" />
-            <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}>
+            <a
+              href="mailto:parquedosprincipesresidence@gmail.com"
+              style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
+              className="hover:text-[#C9A84C] transition-colors duration-200"
+            >
               parquedosprincipesresidence@gmail.com
-            </span>
+            </a>
           </div>
         </motion.div>
 
@@ -249,14 +275,22 @@ export function ContactsSection() {
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={!formData.rgpd}
-            className="w-full md:w-auto px-12 py-3 bg-[#C9A84C] hover:bg-[#B8963E] text-[#1B2A3B] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
-            style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px', fontWeight: 600 }}
-          >
-            {t.submit}
-          </button>
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+            <button
+              type="submit"
+              disabled={!formData.rgpd || status === 'sending'}
+              className="w-full md:w-auto px-12 py-3 bg-[#C9A84C] hover:bg-[#B8963E] text-[#1B2A3B] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+              style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px', fontWeight: 600 }}
+            >
+              {status === 'sending' ? t.sending : t.submit}
+            </button>
+            {status === 'success' && (
+              <span className="text-green-600" style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px' }}>{t.success}</span>
+            )}
+            {status === 'error' && (
+              <span className="text-red-600" style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px' }}>{t.error}</span>
+            )}
+          </div>
         </motion.form>
       </div>
     </section>

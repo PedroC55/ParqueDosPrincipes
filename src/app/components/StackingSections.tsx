@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import imgHall from '../../Assets/Images/hall.jpg';
-import imgPiscina from '../../Assets/Images/piscina.jpg';
-import imgGinasio from '../../Assets/Images/ginasio.jpg';
-import imgJardim from '../../Assets/Images/jardim.jpg';
+import imgPiscina from '../../Assets/Images/POOL_V1_FINAL.png';
+import imgGinasio from '../../Assets/Images/GYM_V1_FINAL.png';
+import imgJardim from '../../Assets/Images/JARDIM01_V1_FINAL.png';
 
 const css = `
   .stacking-wrapper {
