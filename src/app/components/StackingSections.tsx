@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import imgHall from '../../Assets/Images/hall.jpg';
+import imgHall from '../../Assets/Images/HALL_V1_FINAL.png';
 import imgPiscina from '../../Assets/Images/POOL_V1_FINAL.png';
 import imgGinasio from '../../Assets/Images/GYM_V1_FINAL.png';
 import imgJardim from '../../Assets/Images/JARDIM01_V1_FINAL.png';
+import imgGaragem from '../../Assets/Images/GARAGE_V1_FINAL.png';
 
 const css = `
   .stacking-wrapper {
     position: relative;
-    height: 400vh;
+    height: 500vh;
   }
 
   .stacking-section {
@@ -56,6 +57,9 @@ const css = `
   /* Panel 4 — Natureza: Image LEFT / Text RIGHT */
   .section-4 { z-index: 4; background: #F5F0E8; }
 
+  /* Panel 5 — Garagem: Text LEFT / Image RIGHT */
+  .section-5 { z-index: 5; background: #FFFFFF; flex-direction: row-reverse; }
+
   @media (max-width: 768px) {
     .stacking-wrapper {
       height: auto;
@@ -102,6 +106,11 @@ const translations = {
       headline: 'Viver em\nHarmonia Verde',
       body: 'Jardins exuberantes e áreas de lazer ao ar livre criam um refúgio natural onde a natureza e o conforto urbano coexistem em perfeita harmonia.',
     },
+    section5: {
+      label: 'MOBILIDADE',
+      headline: 'Estacionamento\nPrivativo',
+      body: 'Garagens privativas espaçosas e seguras, concebidas para garantir a máxima comodidade no dia a dia dos residentes do Parque dos Príncipes.',
+    },
   },
   EN: {
     section1: {
@@ -123,6 +132,11 @@ const translations = {
       label: 'NATURE',
       headline: 'Living in\nGreen Harmony',
       body: 'Lush gardens and outdoor leisure areas create a natural refuge where nature and urban comfort coexist in perfect harmony.',
+    },
+    section5: {
+      label: 'MOBILITY',
+      headline: 'Private\nParking',
+      body: 'Spacious and secure private garages, designed to ensure maximum convenience for the daily lives of Parque dos Príncipes residents.',
     },
   },
 };
@@ -232,6 +246,14 @@ export function StackingSections() {
           <img src={imgJardim} alt={t.section4.label} className="image-side" />
           <div className="text-side">
             <TextBlock {...t.section4} />
+          </div>
+        </div>
+
+        {/* Panel 5 — Garagem: Text LEFT / Image RIGHT */}
+        <div className="stacking-section section-5">
+          <img src={imgGaragem} alt={t.section5.label} className="image-side" />
+          <div className="text-side">
+            <TextBlock {...t.section5} />
           </div>
         </div>
 
