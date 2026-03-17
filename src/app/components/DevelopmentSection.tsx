@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from 'motion/react';
 import { useInView } from './hooks/useInView';
 import { Check } from 'lucide-react';
@@ -27,11 +28,12 @@ export function DevelopmentSection({ image1, image2 }: DevelopmentSectionProps) 
   const { amenities } = t;
 
   return (
-    <section id="development" ref={ref} className="w-full bg-white">
+    <section id="development" className="w-full bg-white">
       <StackingSections />
 
       {/* Two Image Strip */}
       <motion.div
+        ref={ref as React.RefObject<HTMLDivElement>}
         initial={{ opacity: 0, y: 30 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
         transition={{ duration: 0.8, delay: 0.2 }}
