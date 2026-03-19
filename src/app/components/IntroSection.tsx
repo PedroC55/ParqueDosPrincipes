@@ -43,9 +43,9 @@ export function IntroSection({ aerialImage }: IntroSectionProps) {
       >
         <div
           className="text-[#C9A84C] mb-6 tracking-[0.2em]"
-          style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
+          style={{ fontFamily: 'Lato, sans-serif', fontSize: '20px' }}
         >
-          {t.label}
+          CAMAMA - <strong style={{ fontWeight: 900 }}>TALATONA</strong>
         </div>
         <h2
           className="text-[#2C2C2C] mb-8 leading-tight"

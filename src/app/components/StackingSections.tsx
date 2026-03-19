@@ -148,21 +148,21 @@ interface TextBlockProps {
   dark?: boolean;
 }
 
-function TextBlock({ label, headline, body, dark = false }: TextBlockProps) {
+function TextBlock({ headline, body, dark = false }: TextBlockProps) {
   return (
     <>
       <div
         style={{
           color: '#C9A84C',
           fontFamily: 'Lato, sans-serif',
-          fontSize: '11px',
-          fontWeight: 600,
+          fontSize: '18px',
+          fontWeight: 400,
           letterSpacing: '0.25em',
           marginBottom: '20px',
           textTransform: 'uppercase',
         }}
       >
-        {label}
+        CAMAMA - <strong style={{ fontWeight: 900 }}>TALATONA</strong>
       </div>
       <h2
         style={{

@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { useInView } from './hooks/useInView';
 import { useLanguage } from '../context/LanguageContext';
-import gestaoLogo from '../../Assets/Logos/logo_gestao_do_condado_dourado.png';
+import gestaoLogo from '../../Assets/Logos/logo_gestao_do_condado_branco.png';
 
 const translations = {
   PT: {
@@ -38,20 +38,20 @@ export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
   const t = translations[lang];
 
   return (
-    <section id="promotora" ref={ref} className="w-full relative min-h-[600px]">
+    <section id="promotora" ref={ref} className="w-full relative overflow-hidden min-h-[600px] lg:min-h-[700px] xl:min-h-[750px]">
 
       {/* Background: split image left / dark right */}
-      <div className="w-full h-full absolute inset-0 grid lg:grid-cols-2">
-        {/* Left: image full opacity */}
-        <div className="relative h-full">
+      <div className="absolute inset-0 flex">
+        {/* Left: image */}
+        <div className="w-full lg:w-1/2 h-full">
           <img
             src={interiorImage}
             alt="Interior view"
             className="w-full h-full object-cover"
           />
         </div>
-        {/* Right: dark bg with logo full opacity */}
-        <div className="relative flex items-center justify-center" style={{ backgroundColor: 'rgb(45, 107, 121)' }}>
+        {/* Right: dark teal */}
+        <div className="hidden lg:flex w-1/2 h-full items-center justify-center" style={{ backgroundColor: 'rgb(45, 107, 121)' }}>
           <img
             src={gestaoLogo}
             alt="Gestão do Condado"
@@ -61,40 +61,42 @@ export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
         </div>
       </div>
 
-      {/* Full-section black mask behind text */}
+      {/* Full-section black mask */}
       <div className="absolute inset-0 z-[5]" style={{ backgroundColor: 'rgba(0,0,0,0.50)' }} />
 
-      {/* Text centered over the full section */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-        transition={{ duration: 0.8 }}
-        className="relative z-10 flex flex-col justify-center items-start max-w-3xl px-8 py-16 lg:py-24 min-h-[600px]" style={{ marginLeft: '22%' }}
-      >
-        <div
-          className="text-white mb-3 tracking-[0.2em]"
-          style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
+      {/* Text — centrado na secção, ligeiramente à esquerda */}
+      <div className="absolute inset-0 z-10 flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.8 }}
+          className="flex flex-col items-start w-full max-w-xl px-8 lg:px-0 lg:pr-24"
         >
-          {t.label}
-        </div>
-        <h2
-          className="text-white mb-6"
-          style={{ fontFamily: 'Lato, sans-serif', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 300, letterSpacing: '0.1em' }}
-        >
-          {t.title}
-        </h2>
-        <div className="space-y-4">
-          {t.paragraphs.map((p, i) => (
-            <p
-              key={i}
-              className="text-white"
-              style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.8' }}
-            >
-              {p}
-            </p>
-          ))}
-        </div>
-      </motion.div>
+          <div
+            className="text-white mb-3 tracking-[0.2em]"
+            style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
+          >
+            {t.label}
+          </div>
+          <h2
+            className="text-white mb-6"
+            style={{ fontFamily: 'Lato, sans-serif', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 300, letterSpacing: '0.1em' }}
+          >
+            {t.title}
+          </h2>
+          <div className="space-y-4">
+            {t.paragraphs.map((p, i) => (
+              <p
+                key={i}
+                className="text-white"
+                style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.8' }}
+              >
+                {p}
+              </p>
+            ))}
+          </div>
+        </motion.div>
+      </div>
 
     </section>
   );
