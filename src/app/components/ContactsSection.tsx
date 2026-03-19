@@ -104,40 +104,73 @@ export function ContactsSection() {
             {t.title}
           </h2>
 
-          {/* Contact Info */}
-          <div className="flex items-center justify-center gap-6 text-[#2C2C2C]/70 mb-12">
-            {/* Instagram */}
-            <a
-              href="https://www.instagram.com/parquedosprincipesresidence/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-              className="transition-opacity duration-200 hover:opacity-75"
-            >
-              <img src={instagramIcon} alt="Instagram" width={32} height={32} />
-            </a>
-
-            {/* Email */}
-            <div className="flex items-center gap-2">
-              <Mail size={20} className="text-[#C9A84C]" />
+          {/* Contact Info — desktop: row (icon | email | icon), mobile: email then icons below */}
+          <div className="text-[#2C2C2C]/70 mb-12">
+            {/* Desktop layout */}
+            <div className="hidden md:flex items-center justify-center gap-6">
               <a
-                href="mailto:parquedosprincipesresidence@gmail.com"
-                style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
-                className="hover:text-[#C9A84C] transition-colors duration-200"
+                href="https://www.instagram.com/parquedosprincipesresidence/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="transition-opacity duration-200 hover:opacity-75"
               >
-                parquedosprincipesresidence@gmail.com
+                <img src={instagramIcon} alt="Instagram" width={32} height={32} />
+              </a>
+              <div className="flex items-center gap-2">
+                <Mail size={20} className="text-[#C9A84C]" />
+                <a
+                  href="mailto:parquedosprincipesresidence@gmail.com"
+                  style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
+                  className="hover:text-[#C9A84C] transition-colors duration-200"
+                >
+                  parquedosprincipesresidence@gmail.com
+                </a>
+              </div>
+              <a
+                href="https://www.facebook.com/parquedosprincipesresidence"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="transition-opacity duration-200 hover:opacity-75"
+              >
+                <img src={facebookIcon} alt="Facebook" width={32} height={32} />
               </a>
             </div>
 
-            {/* Facebook */}
-            <a
-              href="#"
-              aria-label="Facebook"
-              className="transition-opacity duration-200 hover:opacity-75 cursor-default"
-              onClick={(e) => e.preventDefault()}
-            >
-              <img src={facebookIcon} alt="Facebook" width={32} height={32} />
-            </a>
+            {/* Mobile layout */}
+            <div className="flex flex-col items-center gap-4 md:hidden">
+              <div className="flex items-center gap-2">
+                <Mail size={20} className="text-[#C9A84C]" />
+                <a
+                  href="mailto:parquedosprincipesresidence@gmail.com"
+                  style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
+                  className="hover:text-[#C9A84C] transition-colors duration-200"
+                >
+                  parquedosprincipesresidence@gmail.com
+                </a>
+              </div>
+              <div className="flex items-center gap-6">
+                <a
+                  href="https://www.instagram.com/parquedosprincipesresidence/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  className="transition-opacity duration-200 hover:opacity-75"
+                >
+                  <img src={instagramIcon} alt="Instagram" width={32} height={32} />
+                </a>
+                <a
+                  href="https://www.facebook.com/parquedosprincipesresidence"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                  className="transition-opacity duration-200 hover:opacity-75"
+                >
+                  <img src={facebookIcon} alt="Facebook" width={32} height={32} />
+                </a>
+              </div>
+            </div>
           </div>
         </motion.div>
 

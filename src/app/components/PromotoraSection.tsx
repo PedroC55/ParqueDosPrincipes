@@ -37,65 +37,83 @@ export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
   const { lang } = useLanguage();
   const t = translations[lang];
 
-  return (
-    <section id="promotora" ref={ref} className="w-full relative overflow-hidden min-h-[600px] lg:min-h-[700px] xl:min-h-[750px]">
+  const textContent = (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+      transition={{ duration: 0.8 }}
+      className="flex flex-col items-start w-full max-w-xl"
+    >
+      <div
+        className="text-white mb-3 tracking-[0.2em]"
+        style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
+      >
+        {t.label}
+      </div>
+      <h2
+        className="text-white mb-6"
+        style={{ fontFamily: 'Lato, sans-serif', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 300, letterSpacing: '0.1em' }}
+      >
+        {t.title}
+      </h2>
+      <div className="space-y-4">
+        {t.paragraphs.map((p, i) => (
+          <p
+            key={i}
+            className="text-white"
+            style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.8' }}
+          >
+            {p}
+          </p>
+        ))}
+      </div>
+    </motion.div>
+  );
 
-      {/* Background: split image left / dark right */}
-      <div className="absolute inset-0 flex">
-        {/* Left: image */}
-        <div className="w-full lg:w-1/2 h-full">
-          <img
-            src={interiorImage}
-            alt="Interior view"
-            className="w-full h-full object-cover"
-          />
-        </div>
-        {/* Right: dark teal */}
-        <div className="hidden lg:flex w-1/2 h-full items-center justify-center" style={{ backgroundColor: 'rgb(45, 107, 121)' }}>
-          <img
-            src={gestaoLogo}
-            alt="Gestão do Condado"
-            className="w-48 lg:w-64 object-contain"
-            style={{ opacity: 0.25 }}
-          />
+  return (
+    <section id="promotora" ref={ref} className="w-full">
+
+      {/* Mobile layout */}
+      <div
+        className="lg:hidden relative"
+        style={{
+          backgroundImage: `url(${interiorImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* Dark overlay */}
+        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.55)' }} />
+        {/* Text flows naturally */}
+        <div className="relative z-10 px-8 py-16">
+          {textContent}
         </div>
       </div>
 
-      {/* Full-section black mask */}
-      <div className="absolute inset-0 z-[5]" style={{ backgroundColor: 'rgba(0,0,0,0.50)' }} />
-
-      {/* Text — centrado na secção, ligeiramente à esquerda */}
-      <div className="absolute inset-0 z-10 flex items-center justify-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col items-start w-full max-w-xl px-8 lg:px-0 lg:pr-24"
-        >
-          <div
-            className="text-white mb-3 tracking-[0.2em]"
-            style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
-          >
-            {t.label}
+      {/* Desktop layout */}
+      <div className="hidden lg:block relative overflow-hidden min-h-[700px] xl:min-h-[750px]">
+        {/* Background: split image left / dark right */}
+        <div className="absolute inset-0 flex">
+          <div className="w-1/2 h-full">
+            <img src={interiorImage} alt="Interior view" className="w-full h-full object-cover" />
           </div>
-          <h2
-            className="text-white mb-6"
-            style={{ fontFamily: 'Lato, sans-serif', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 300, letterSpacing: '0.1em' }}
-          >
-            {t.title}
-          </h2>
-          <div className="space-y-4">
-            {t.paragraphs.map((p, i) => (
-              <p
-                key={i}
-                className="text-white"
-                style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.8' }}
-              >
-                {p}
-              </p>
-            ))}
+          <div className="w-1/2 h-full flex items-center justify-center" style={{ backgroundColor: 'rgb(45, 107, 121)' }}>
+            <img
+              src={gestaoLogo}
+              alt="Gestão do Condado"
+              className="w-64 object-contain"
+              style={{ opacity: 0.25 }}
+            />
           </div>
-        </motion.div>
+        </div>
+        {/* Full-section black mask */}
+        <div className="absolute inset-0 z-[5]" style={{ backgroundColor: 'rgba(0,0,0,0.50)' }} />
+        {/* Text centered, shifted left */}
+        <div className="absolute inset-0 z-10 flex items-center justify-center">
+          <div className="w-full max-w-xl pr-24">
+            {textContent}
+          </div>
+        </div>
       </div>
 
     </section>
