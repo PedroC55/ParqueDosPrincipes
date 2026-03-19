@@ -4,14 +4,14 @@ import { useLanguage } from '../context/LanguageContext';
 
 const translations = {
   PT: {
-    label: 'CAMAMA',
+    label: 'CAMAMA - TALATONA',
     title: 'No Coração de Luanda',
     p1: 'Localizado em Camama, uma das áreas mais promissoras de Luanda, este empreendimento oferece uma localização estratégica com fácil acesso aos principais pontos da cidade.',
     p2: 'Com infraestrutura moderna e completa, o projeto combina elegância, funcionalidade e segurança, proporcionando um estilo de vida único para você e sua família.',
     p3: 'Um novo conceito de residência que valoriza cada detalhe, desde o design arquitetônico até os acabamentos premium, criando espaços que inspiram conforto e sofisticação.',
   },
   EN: {
-    label: 'CAMAMA',
+    label: 'CAMAMA - TALATONA',
     title: 'In the Heart of Luanda',
     p1: 'Located in Camama, one of the most promising areas of Luanda, this development offers a strategic location with easy access to the city\'s main points.',
     p2: 'With modern and complete infrastructure, the project combines elegance, functionality and security, providing a unique lifestyle for you and your family.',

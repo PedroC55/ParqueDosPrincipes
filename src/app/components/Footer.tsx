@@ -4,12 +4,14 @@ import parqueLogo from '../../Assets/Logos/logo_parque_dos_principes_dourado.png
 
 const translations = {
   PT: {
-    disclaimer: 'As imagens utilizadas são meramente ilustrativas e não representam necessariamente o produto final. Todas as informações e especificações estão sujeitas a alterações sem aviso prévio.',
+    disclaimer: 'Todos os materiais, acabamentos e equipamentos descritos neste mapa são suscetíveis de ser ajustados / alterados, designadamente por exigências de ordem técnica, legal, arquitetónica, comercial ou de aprovisionamento, bem como por imposição das entidades licenciadoras ou por necessidades de compatibilização entre os projetos de execução de arquitetura e das especialidades sem que, contudo, estes ajustamentos / alterações, tenham implicações no nível de qualidade dos materiais, acabamentos e equipamentos previstos neste mapa.',
     privacy: 'Política de Privacidade',
+    copyright: '2026 © Gestão do Condado',
   },
   EN: {
-    disclaimer: 'The images used are merely illustrative and do not necessarily represent the final product. All information and specifications are subject to change without prior notice.',
+    disclaimer: 'All materials, finishes and equipment described in this plan are subject to adjustment / alteration, namely due to technical, legal, architectural, commercial or supply requirements, as well as by imposition of licensing entities or compatibility needs between architecture and specialty execution projects, without, however, these adjustments / alterations having implications on the quality level of the materials, finishes and equipment provided in this plan.',
     privacy: 'Privacy Policy',
+    copyright: '2026 © Gestão do Condado',
   },
 };
 
@@ -25,38 +27,42 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Lower Band - Developer Info */}
+      {/* Lower Band - Developer Info + Bottom Bar */}
       <div className="bg-[#1B2A3B] py-12">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
-          <div className="flex flex-col items-center gap-6">
-            {/* Developer Logo */}
+          {/* Developer Logo */}
+          <div className="flex justify-center mb-8">
             <img src={gestaoLogo} alt="Gestão do Condado" className="h-24 w-auto object-contain" />
+          </div>
 
-            {/* Disclaimer */}
+          {/* Disclaimer + Divider wrapper — same width */}
+          <div className="max-w-4xl mx-auto">
             <p
-              className="text-[#F5F0E8]/60 text-center max-w-2xl"
+              className="text-[#F5F0E8]/50 text-center mb-8"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px', lineHeight: '1.6' }}
             >
               {t.disclaimer}
             </p>
-          </div>
-        </div>
-      </div>
 
-      {/* Bottom Bar */}
-      <div className="bg-[#1C1C1C] py-6">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-[#F5F0E8]/50">
-            <button
-              className="hover:text-[#C9A84C] transition-colors"
-              style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
-            >
-              {t.privacy}
-            </button>
-            <span className="hidden md:inline">|</span>
-            <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}>
-              Powered by Bspacy
-            </span>
+            {/* Divider */}
+            <div className="border-t border-white/10 pt-6">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-[#F5F0E8]/50">
+                <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}>
+                  {t.copyright}
+                </span>
+                <div className="flex items-center gap-6">
+                  <button
+                    className="hover:text-[#C9A84C] transition-colors"
+                    style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
+                  >
+                    {t.privacy}
+                  </button>
+                  <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}>
+                    Powered by Bspacy
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

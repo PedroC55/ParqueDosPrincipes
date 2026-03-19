@@ -4,6 +4,8 @@ import { useInView } from './hooks/useInView';
 import { Mail } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import emailjs from '@emailjs/browser';
+import instagramIcon from '../../Assets/Logos/instagram.svg';
+import facebookIcon from '../../Assets/Logos/facebook.svg';
 
 const translations = {
   PT: {
@@ -11,8 +13,8 @@ const translations = {
     nome: 'Nome *', pais: 'País *', telefone: 'Telefone *', email: 'Email *',
     tipologia: 'Tipologia', preco: 'Faixa de Preço', mensagem: 'Mensagem',
     select: 'Selecione...',
-    newsletter: 'Desejo receber newsletters e atualizações sobre o projeto',
-    rgpd: 'Li e aceito a Política de Privacidade (RGPD) *',
+    newsletter: 'Subscrever newsletter, ofertas de marketing e outras atualizações.',
+    rgpd: 'Ao assinalar esta caixa, autorizo expressamente a recolha e tratamento dos meus dados para contactos comerciais e formalização de propostas de serviços, em conformidade com a Política de Privacidade e os Termos e Condições.',
     submit: 'Enviar', sending: 'A enviar...', success: 'Mensagem enviada com sucesso!', error: 'Ocorreu um erro. Tente novamente.',
   },
   EN: {
@@ -20,8 +22,8 @@ const translations = {
     nome: 'Name *', pais: 'Country *', telefone: 'Phone *', email: 'Email *',
     tipologia: 'Typology', preco: 'Price Range', mensagem: 'Message',
     select: 'Select...',
-    newsletter: 'I wish to receive newsletters and project updates',
-    rgpd: 'I have read and accept the Privacy Policy (GDPR) *',
+    newsletter: 'Subscribe to newsletter, marketing offers and other updates.',
+    rgpd: 'By checking this box, I expressly authorize the collection and processing of my data for commercial contacts and service proposal formalization, in accordance with the Privacy Policy and Terms and Conditions.',
     submit: 'Send', sending: 'Sending...', success: 'Message sent successfully!', error: 'An error occurred. Please try again.',
   },
 };
@@ -81,7 +83,7 @@ export function ContactsSection() {
   };
 
   return (
-    <section id="contacts" ref={ref} className="w-full bg-white py-16 lg:py-24">
+    <section id="contacts" ref={ref} className="w-full bg-white pt-16 lg:pt-24 pb-16 lg:pb-24">
       <div className="max-w-[800px] mx-auto px-6 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -103,14 +105,38 @@ export function ContactsSection() {
           </h2>
 
           {/* Contact Info */}
-          <div className="flex items-center justify-center gap-3 text-[#2C2C2C]/70 mb-12">
-            <Mail size={20} className="text-[#C9A84C]" />
+          <div className="flex items-center justify-center gap-6 text-[#2C2C2C]/70 mb-12">
+            {/* Instagram */}
             <a
-              href="mailto:parquedosprincipesresidence@gmail.com"
-              style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
-              className="hover:text-[#C9A84C] transition-colors duration-200"
+              href="https://www.instagram.com/parquedosprincipesresidence/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="transition-opacity duration-200 hover:opacity-75"
             >
-              parquedosprincipesresidence@gmail.com
+              <img src={instagramIcon} alt="Instagram" width={32} height={32} />
+            </a>
+
+            {/* Email */}
+            <div className="flex items-center gap-2">
+              <Mail size={20} className="text-[#C9A84C]" />
+              <a
+                href="mailto:parquedosprincipesresidence@gmail.com"
+                style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
+                className="hover:text-[#C9A84C] transition-colors duration-200"
+              >
+                parquedosprincipesresidence@gmail.com
+              </a>
+            </div>
+
+            {/* Facebook */}
+            <a
+              href="#"
+              aria-label="Facebook"
+              className="transition-opacity duration-200 hover:opacity-75 cursor-default"
+              onClick={(e) => e.preventDefault()}
+            >
+              <img src={facebookIcon} alt="Facebook" width={32} height={32} />
             </a>
           </div>
         </motion.div>
@@ -199,9 +225,10 @@ export function ContactsSection() {
                 style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px' }}
               >
                 <option value="">{t.select}</option>
-                <option value="T1">T1</option>
                 <option value="T2">T2</option>
                 <option value="T3">T3</option>
+                <option value="T2 Duplex +1">T2 Duplex +1</option>
+                <option value="T3 Duplex +1">T3 Duplex +1</option>
               </select>
             </div>
             <div>
@@ -217,9 +244,9 @@ export function ContactsSection() {
                 style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px' }}
               >
                 <option value="">{t.select}</option>
-                <option value="50-100">$50k - $100k</option>
-                <option value="100-200">$100k - $200k</option>
-                <option value="200+">$200k+</option>
+                <option value="425000-495000">De 425.000 € a 495.000 €</option>
+                <option value="495000-600000">De 495.000 € a 600.000 €</option>
+                <option value="600000+">Acima de 600.000 €</option>
               </select>
             </div>
           </div>

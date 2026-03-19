@@ -9,13 +9,21 @@ const translations = {
   PT: {
     label: 'GALERIA',
     title: 'Explore o Projeto',
-    subtitle: 'Descubra os espaços exclusivos do nosso empreendimento',
+    welcome: 'Seja bem-vindo a este lugar exclusivo, a poucos minutos de',
+    highlight: 'Talatona',
+    welcomeEnd: ', surge uma nova forma de viver - Parque dos Príncipes Residence.',
+    address1: 'Luanda - Camama',
+    address2: 'Rua das artes, lote 10',
     categories: ['EXTERIOR', 'INTERIOR', 'AMENIDADES', 'VISTAS'],
   },
   EN: {
     label: 'GALLERY',
     title: 'Explore the Project',
-    subtitle: 'Discover the exclusive spaces of our development',
+    welcome: 'Welcome to this exclusive place, a few minutes from',
+    highlight: 'Talatona',
+    welcomeEnd: ', a new way of living emerges - Parque dos Príncipes Residence.',
+    address1: 'Luanda - Camama',
+    address2: 'Rua das artes, lote 10',
     categories: ['EXTERIOR', 'INTERIOR', 'AMENITIES', 'VIEWS'],
   },
 };
@@ -84,15 +92,23 @@ export function GallerySection({ images }: GallerySectionProps) {
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="bg-[#2D6B79] p-8 flex flex-col justify-center items-center text-center"
+            className="bg-[#2D6B79] p-8 flex flex-col justify-between pb-16"
           >
-            <img src={parqueLogo} alt="Parque dos Príncipes" className="h-16 w-auto object-contain mb-6" />
-            <p
-              className="text-[#F5F0E8]/90"
-              style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', lineHeight: '1.6' }}
-            >
-              {t.subtitle}
-            </p>
+            <img src={parqueLogo} alt="Parque dos Príncipes" className="h-14 w-auto object-contain self-start mt-8" />
+            <div>
+              <p
+                className="text-white/90 mb-6"
+                style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.7' }}
+              >
+                {t.welcome} <strong>{t.highlight}</strong>{t.welcomeEnd}
+              </p>
+              <p
+                className="text-white/70"
+                style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.6' }}
+              >
+                {t.address1}<br />{t.address2}
+              </p>
+            </div>
           </motion.div>
 
           {/* Gallery Grid */}

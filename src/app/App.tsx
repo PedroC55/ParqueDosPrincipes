@@ -7,7 +7,7 @@ import imgBar from '../Assets/Images/BAR_V1_FINAL.png';
 import imgSalaoJogos from '../Assets/Images/SJOGOS_FINAL.png';
 import imgJardim from '../Assets/Images/JARDIM01_V1_FINAL.png';
 import imgMasterplan from '../Assets/Images/TOP_V1_FINAL.png';
-import imgHall from '../Assets/Images/hall.jpg';
+import imgHall from '../Assets/Images/HALL_V1_FINAL.png';
 import { Navigation } from './components/Navigation';
 import { HeroSection } from './components/HeroSection';
 import { IntroSection } from './components/IntroSection';

@@ -5,12 +5,26 @@ import gestaoLogo from '../../Assets/Logos/logo_gestao_do_condado_dourado.png';
 
 const translations = {
   PT: {
-    label: 'PROMOTORA',
-    gestaoDesc: 'A Gestão do Condado, Participações Sociais, Lda é uma empresa angolana com vasta experiência no setor imobiliário. Com foco em excelência e compromisso com a qualidade, desenvolvemos projetos que se destacam no mercado.',
+    label: 'QUEM SOMOS',
+    title: 'GESTÃO DO CONDADO',
+    paragraphs: [
+      'Há quase 20 anos, a Gestão do Condado, LDA firmou suas raízes em Angola, construindo um legado sólido no setor de construção e promoção imobiliária. Com um dos nossos sócios trazendo décadas de experiência, estamos comprometidos em transformar o cenário urbano e atender às necessidades da comunidade.',
+      'Guiados por princípios éticos e impulsionados pela inovação, assumimos um papel ativo na sociedade, promovendo as melhores práticas e antecipando tendências que moldam a vida moderna. Nossa missão é criar espaços que não apenas habitam, mas que também inspiram e conectam as pessoas.',
+      'Se quiser saber mais sobre os nossos projetos, pedir informações extras ou explorar uma colaboração, deixe o seu contacto. Um membro da nossa equipa contacta-o o mais breve possível.',
+      'Junte-se a nós nesta jornada de construção e transformação!',
+      'Ter um formulário para quem tiver interesse preencher, e nós posteriormente respondermos.',
+    ],
   },
   EN: {
-    label: 'DEVELOPER',
-    gestaoDesc: 'Gestão do Condado, Participações Sociais, Lda is an Angolan company with extensive experience in the real estate sector. With a focus on excellence and commitment to quality, we develop projects that stand out in the market.',
+    label: 'WHO WE ARE',
+    title: 'GESTÃO DO CONDADO',
+    paragraphs: [
+      'For nearly 20 years, Gestão do Condado, LDA has established its roots in Angola, building a solid legacy in the construction and real estate promotion sector. With one of our partners bringing decades of experience, we are committed to transforming the urban landscape and meeting community needs.',
+      'Guided by ethical principles and driven by innovation, we take an active role in society, promoting best practices and anticipating trends that shape modern life. Our mission is to create spaces that not only house people, but also inspire and connect them.',
+      'If you would like to know more about our projects, request additional information or explore a collaboration, leave your contact. A member of our team will get back to you as soon as possible.',
+      'Join us on this journey of construction and transformation!',
+      'A form is available for those interested in filling out, and we will subsequently respond.',
+    ],
   },
 };
 
@@ -24,50 +38,64 @@ export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
   const t = translations[lang];
 
   return (
-    <section id="promotora" ref={ref} className="w-full grid lg:grid-cols-2">
-      {/* Left: Interior Photo */}
-      <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-        transition={{ duration: 0.8 }}
-        className="h-[400px] lg:h-auto min-h-[600px]"
-      >
-        <img
-          src={interiorImage}
-          alt="Interior view"
-          className="w-full h-full object-cover"
-        />
-      </motion.div>
+    <section id="promotora" ref={ref} className="w-full relative min-h-[600px]">
 
-      {/* Right: Developer Info */}
+      {/* Background: split image left / dark right */}
+      <div className="w-full h-full absolute inset-0 grid lg:grid-cols-2">
+        {/* Left: image full opacity */}
+        <div className="relative h-full">
+          <img
+            src={interiorImage}
+            alt="Interior view"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        {/* Right: dark bg with logo full opacity */}
+        <div className="relative flex items-center justify-center" style={{ backgroundColor: 'rgb(45, 107, 121)' }}>
+          <img
+            src={gestaoLogo}
+            alt="Gestão do Condado"
+            className="w-48 lg:w-64 object-contain"
+            style={{ opacity: 0.25 }}
+          />
+        </div>
+      </div>
+
+      {/* Full-section black mask behind text */}
+      <div className="absolute inset-0 z-[5]" style={{ backgroundColor: 'rgba(0,0,0,0.50)' }} />
+
+      {/* Text centered over the full section */}
       <motion.div
-        initial={{ opacity: 0, x: 50 }}
-        animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
         transition={{ duration: 0.8 }}
-        className="bg-[#1B2A3B] px-6 lg:px-16 py-16 lg:py-24 flex flex-col justify-center"
+        className="relative z-10 flex flex-col justify-center items-start max-w-3xl px-8 py-16 lg:py-24 min-h-[600px]" style={{ marginLeft: '22%' }}
       >
         <div
-          className="text-[#C9A84C] mb-8 tracking-[0.2em]"
+          className="text-white mb-3 tracking-[0.2em]"
           style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
         >
           {t.label}
         </div>
-
-        <div className="space-y-12">
-          {/* Gestão do Condado */}
-          <div>
-            <div className="mb-6">
-              <img src={gestaoLogo} alt="Gestão do Condado" className="h-24 w-auto object-contain mb-4" />
-            </div>
+        <h2
+          className="text-white mb-6"
+          style={{ fontFamily: 'Lato, sans-serif', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 300, letterSpacing: '0.1em' }}
+        >
+          {t.title}
+        </h2>
+        <div className="space-y-4">
+          {t.paragraphs.map((p, i) => (
             <p
-              className="text-[#F5F0E8]/80 leading-relaxed"
-              style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px', lineHeight: '1.8' }}
+              key={i}
+              className="text-white"
+              style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.8' }}
             >
-              {t.gestaoDesc}
+              {p}
             </p>
-          </div>
+          ))}
         </div>
       </motion.div>
+
     </section>
   );
 }
