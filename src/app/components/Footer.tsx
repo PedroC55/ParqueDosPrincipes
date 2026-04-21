@@ -1,6 +1,8 @@
 import { useLanguage } from '../context/LanguageContext';
 import gestaoLogo from '../../Assets/Logos/logo_gestao_do_condado_dourado.png';
 import parqueLogo from '../../Assets/Logos/logo_parque_dos_principes_dourado.png';
+import renatoNetoLogo from '../../Assets/Logos/renato_neto.png';
+import hubductionLogo from '../../Assets/Logos/logo_hubduction.png';
 
 const translations = {
   PT: {
@@ -30,9 +32,11 @@ export function Footer() {
       {/* Lower Band - Developer Info + Bottom Bar */}
       <div className="bg-[#1B2A3B] py-12">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
-          {/* Developer Logo */}
-          <div className="flex justify-center mb-8">
+          {/* Developer Logos */}
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 mb-8">
+            <img src={renatoNetoLogo} alt="Renato Neto" className="h-14 w-auto object-contain" />
             <img src={gestaoLogo} alt="Gestão do Condado" className="h-24 w-auto object-contain" />
+            <img src={hubductionLogo} alt="Hubduction" className="h-14 w-auto object-contain" />
           </div>
 
           {/* Disclaimer + Divider wrapper — same width */}

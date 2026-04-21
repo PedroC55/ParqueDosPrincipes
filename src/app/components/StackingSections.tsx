@@ -9,7 +9,7 @@ import imgGaragem from '../../Assets/Images/GARAGE_V1_FINAL.png';
 const css = `
   .stacking-wrapper {
     position: relative;
-    height: 500vh;
+    height: 600vh;
   }
 
   .stacking-section {
@@ -51,14 +51,17 @@ const css = `
   /* Panel 2 — Arquitectura: Image LEFT / Text RIGHT */
   .section-2 { z-index: 2; background: #F5F0E8; }
 
-  /* Panel 3 — Acabamentos: Text LEFT / Image RIGHT, dark */
-  .section-3 { z-index: 3; background: #1B2A3B; flex-direction: row-reverse; }
+  /* Panel 3 — Refúgio de luxo: Text LEFT / Image RIGHT */
+  .section-3 { z-index: 3; background: #FFFFFF; flex-direction: row-reverse; }
 
-  /* Panel 4 — Natureza: Image LEFT / Text RIGHT */
-  .section-4 { z-index: 4; background: #F5F0E8; }
+  /* Panel 4 — Acabamentos: Text LEFT / Image RIGHT, dark */
+  .section-4 { z-index: 4; background: #1B2A3B; flex-direction: row-reverse; }
 
-  /* Panel 5 — Garagem: Text LEFT / Image RIGHT */
-  .section-5 { z-index: 5; background: #FFFFFF; flex-direction: row-reverse; }
+  /* Panel 5 — Natureza: Image LEFT / Text RIGHT */
+  .section-5 { z-index: 5; background: #F5F0E8; }
+
+  /* Panel 6 — Garagem: Text LEFT / Image RIGHT */
+  .section-6 { z-index: 6; background: #FFFFFF; flex-direction: row-reverse; }
 
   @media (max-width: 768px) {
     .stacking-wrapper {
@@ -70,7 +73,9 @@ const css = `
       flex-direction: column;
     }
     .section-1,
-    .section-3 {
+    .section-3,
+    .section-4,
+    .section-6 {
       flex-direction: column;
     }
     .stacking-section .image-side {
@@ -98,15 +103,20 @@ const translations = {
     },
     section3: {
       label: 'CAMAMA - TALATONA',
+      headline: 'Refúgio de\nLuxo',
+      body: 'Viva momentos únicos de conforto e bem-estar num espaço pensado para quem valoriza o prazer de viver melhor. Relaxe e sinta o equilíbrio entre sofisticação e tranquilidade.',
+    },
+    section4: {
+      label: 'CAMAMA - TALATONA',
       headline: 'Materiais de\nExcelência',
       body: 'Selecionamos os melhores materiais do mercado, garantindo durabilidade, elegância e uma experiência sensorial única em cada espaço.',
     },
-    section4: {
+    section5: {
       label: 'CAMAMA - TALATONA',
       headline: 'Viver em\nHarmonia Verde',
       body: 'Jardins exuberantes e áreas de lazer ao ar livre criam um refúgio natural onde a natureza e o conforto urbano coexistem em perfeita harmonia.',
     },
-    section5: {
+    section6: {
       label: 'CAMAMA - TALATONA',
       headline: 'Estacionamento\nPrivativo',
       body: 'Garagens privativas espaçosas e seguras, concebidas para garantir a máxima comodidade no dia a dia dos residentes do Parque dos Príncipes.',
@@ -125,15 +135,20 @@ const translations = {
     },
     section3: {
       label: 'CAMAMA - TALATONA',
+      headline: 'Luxury\nRetreat',
+      body: 'Live unique moments of comfort and well-being in a space designed for those who value the pleasure of living better. Relax and feel the balance between sophistication and tranquility.',
+    },
+    section4: {
+      label: 'CAMAMA - TALATONA',
       headline: 'Materials of\nExcellence',
       body: 'We selected the best materials on the market, ensuring durability, elegance and a unique sensory experience in every space.',
     },
-    section4: {
+    section5: {
       label: 'CAMAMA - TALATONA',
       headline: 'Living in\nGreen Harmony',
       body: 'Lush gardens and outdoor leisure areas create a natural refuge where nature and urban comfort coexist in perfect harmony.',
     },
-    section5: {
+    section6: {
       label: 'CAMAMA - TALATONA',
       headline: 'Private\nParking',
       body: 'Spacious and secure private garages, designed to ensure maximum convenience for the daily lives of Parque dos Príncipes residents.',
@@ -228,27 +243,35 @@ export function StackingSections() {
           </div>
         </div>
 
-        {/* Panel 3 — Acabamentos: Text LEFT / Image RIGHT (dark) */}
+        {/* Panel 3 — Refúgio de luxo: Text LEFT / Image RIGHT */}
         <div className="stacking-section section-3">
-          <img src={imgGinasio} alt={t.section3.label} className="image-side" />
+          <img src={imgPiscina} alt={t.section3.label} className="image-side" />
           <div className="text-side">
-            <TextBlock {...t.section3} dark />
+            <TextBlock {...t.section3} />
           </div>
         </div>
 
-        {/* Panel 4 — Empreendimento: Image LEFT / Text RIGHT */}
+        {/* Panel 4 — Acabamentos: Text LEFT / Image RIGHT (dark) */}
         <div className="stacking-section section-4">
-          <img src={imgJardim} alt={t.section2.label} className="image-side" />
+          <img src={imgGinasio} alt={t.section4.label} className="image-side" />
           <div className="text-side">
-            <TextBlock {...t.section4} />
+            <TextBlock {...t.section4} dark />
           </div>
         </div>
 
-        {/* Panel 5 — Garagem: Text LEFT / Image RIGHT */}
+        {/* Panel 5 — Natureza: Image LEFT / Text RIGHT */}
         <div className="stacking-section section-5">
-          <img src={imgGaragem} alt={t.section5.label} className="image-side" />
+          <img src={imgJardim} alt={t.section5.label} className="image-side" />
           <div className="text-side">
             <TextBlock {...t.section5} />
+          </div>
+        </div>
+
+        {/* Panel 6 — Garagem: Text LEFT / Image RIGHT */}
+        <div className="stacking-section section-6">
+          <img src={imgGaragem} alt={t.section6.label} className="image-side" />
+          <div className="text-side">
+            <TextBlock {...t.section6} />
           </div>
         </div>
 
