@@ -141,11 +141,19 @@ export function ContactsSection() {
               <div className="flex items-center gap-2">
                 <Phone size={20} className="text-[#C9A84C]" />
                 <a
-                  href="tel:+351916700518"
+                  href="tel:+351936559809"
                   style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
                   className="hover:text-[#C9A84C] transition-colors duration-200"
                 >
-                  916 700 518
+                  +351 936 559 809
+                </a>
+                <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}>·</span>
+                <a
+                  href="tel:+351946518553"
+                  style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
+                  className="hover:text-[#C9A84C] transition-colors duration-200"
+                >
+                  +351 946 518 553
                 </a>
               </div>
             </div>
@@ -162,15 +170,27 @@ export function ContactsSection() {
                   parquedosprincipesresidence@gmail.com
                 </a>
               </div>
-              <div className="flex items-center gap-2">
-                <Phone size={20} className="text-[#C9A84C]" />
-                <a
-                  href="tel:+351916700518"
-                  style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
-                  className="hover:text-[#C9A84C] transition-colors duration-200"
-                >
-                  916 700 518
-                </a>
+              <div className="flex flex-col items-center gap-2">
+                <div className="flex items-center gap-2">
+                  <Phone size={20} className="text-[#C9A84C]" />
+                  <a
+                    href="tel:+351936559809"
+                    style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
+                    className="hover:text-[#C9A84C] transition-colors duration-200"
+                  >
+                    +351 936 559 809
+                  </a>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Phone size={20} className="text-[#C9A84C]" />
+                  <a
+                    href="tel:+351946518553"
+                    style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
+                    className="hover:text-[#C9A84C] transition-colors duration-200"
+                  >
+                    +351 946 518 553
+                  </a>
+                </div>
               </div>
               <div className="flex items-center gap-6">
                 <a

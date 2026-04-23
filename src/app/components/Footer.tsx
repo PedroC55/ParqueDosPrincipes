@@ -34,9 +34,9 @@ export function Footer() {
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
           {/* Developer Logos */}
           <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 mb-8">
-            <img src={renatoNetoLogo} alt="Renato Neto" className="h-14 w-auto object-contain" />
+            <img src={renatoNetoLogo} alt="Renato Neto" className="h-10 w-auto object-contain" />
             <img src={gestaoLogo} alt="Gestão do Condado" className="h-24 w-auto object-contain" />
-            <img src={hubductionLogo} alt="Hubduction" className="h-14 w-auto object-contain" />
+            <img src={hubductionLogo} alt="Hubduction" className="h-10 w-auto object-contain" />
           </div>
 
           {/* Disclaimer + Divider wrapper — same width */}
