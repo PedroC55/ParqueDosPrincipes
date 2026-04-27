@@ -34,11 +34,15 @@ export function Footer() {
       {/* Lower Band - Developer Info + Bottom Bar */}
       <div className="bg-[#1B2A3B] py-12">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
-          {/* Developer Logos */}
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 mb-8">
-            <img src={renatoNetoLogo} alt="Renato Neto" className="h-10 w-auto object-contain" />
+          {/* Promotor — Gestão do Condado, centrado e isolado */}
+          <div className="flex flex-col items-center mb-10">
+            <span
+              className="text-[#C9A84C] mb-8 tracking-[0.25em] uppercase"
+              style={{ fontFamily: 'Lato, sans-serif', fontSize: '11px', fontWeight: 700 }}
+            >
+              Promotor
+            </span>
             <img src={gestaoLogo} alt="Gestão do Condado" className="h-24 w-auto object-contain" />
-            <img src={hubductionLogo} alt="Hubduction" className="h-10 w-auto object-contain" />
           </div>
 
           {/* Disclaimer + Divider wrapper — same width */}
@@ -50,12 +54,24 @@ export function Footer() {
               {t.disclaimer}{' '}<strong>{t.disclaimerNote}</strong>
             </p>
 
-            {/* Divider */}
+            {/* Divider + Bottom Bar */}
             <div className="border-t border-white/10 pt-6">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-[#F5F0E8]/50">
                 <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}>
                   {t.copyright}
                 </span>
+
+                {/* Logos Renato Neto + Hubduction no centro */}
+                <div className="flex items-center gap-6">
+                  <a href="https://renatonetovisuals.com/welcome" target="_blank" rel="noopener noreferrer">
+                    <img src={renatoNetoLogo} alt="Renato Neto" className="h-7 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity" />
+                  </a>
+                  <div className="w-px h-5 bg-white/20" />
+                  <a href="https://www.hubduction.com/inicio" target="_blank" rel="noopener noreferrer">
+                    <img src={hubductionLogo} alt="Hubduction" className="h-7 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity" />
+                  </a>
+                </div>
+
                 <div className="flex items-center gap-6">
                   <button
                     className="hover:text-[#C9A84C] transition-colors"
