@@ -42,7 +42,7 @@ export function Footer() {
             >
               Promotor
             </span>
-            <img src={gestaoLogo} alt="Gestão do Condado" className="h-24 w-auto object-contain" />
+            <img src={gestaoLogo} alt="Gestão do Condado" className="h-24 w-auto object-contain" style={{ transform: 'translateX(12px)' }} />
           </div>
 
           {/* Disclaimer + Divider wrapper — same width */}
@@ -56,13 +56,13 @@ export function Footer() {
 
             {/* Divider + Bottom Bar */}
             <div className="border-t border-white/10 pt-6">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-[#F5F0E8]/50">
+              <div className="grid grid-cols-3 items-center text-[#F5F0E8]/50">
                 <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}>
                   {t.copyright}
                 </span>
 
-                {/* Logos Renato Neto + Hubduction no centro */}
-                <div className="flex items-center gap-6">
+                {/* Logos Renato Neto + Hubduction — divider centrado na página */}
+                <div className="flex items-center justify-center gap-6">
                   <a href="https://renatonetovisuals.com/welcome" target="_blank" rel="noopener noreferrer">
                     <img src={renatoNetoLogo} alt="Renato Neto" className="h-7 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity" />
                   </a>
@@ -72,7 +72,7 @@ export function Footer() {
                   </a>
                 </div>
 
-                <div className="flex items-center gap-6">
+                <div className="flex items-center justify-end gap-6">
                   <button
                     className="hover:text-[#C9A84C] transition-colors"
                     style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
