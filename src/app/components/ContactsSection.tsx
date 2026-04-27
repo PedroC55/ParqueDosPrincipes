@@ -319,9 +319,7 @@ export function ContactsSection() {
                 style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px' }}
               >
                 <option value="">{t.select}</option>
-                <option value="425000-495000">De 425.000 € a 495.000 €</option>
-                <option value="495000-600000">De 495.000 € a 600.000 €</option>
-                <option value="600000+">Acima de 600.000 €</option>
+                <option value="229100000">A partir de 229,100,000.00KZ</option>
               </select>
             </div>
           </div>

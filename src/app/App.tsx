@@ -40,7 +40,7 @@ export default function App() {
 
   return (
     <LanguageProvider>
-    <div className="w-full" style={{ overflowX: 'clip' }}>
+    <div className="w-full">
       <Navigation />
 
       <HeroSection />

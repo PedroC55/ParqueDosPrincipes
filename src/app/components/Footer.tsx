@@ -7,11 +7,13 @@ import hubductionLogo from '../../Assets/Logos/logo_hubduction.png';
 const translations = {
   PT: {
     disclaimer: 'Todos os materiais, acabamentos e equipamentos descritos neste mapa são suscetíveis de ser ajustados / alterados, designadamente por exigências de ordem técnica, legal, arquitetónica, comercial ou de aprovisionamento, bem como por imposição das entidades licenciadoras ou por necessidades de compatibilização entre os projetos de execução de arquitetura e das especialidades sem que, contudo, estes ajustamentos / alterações, tenham implicações no nível de qualidade dos materiais, acabamentos e equipamentos previstos neste mapa.',
+    disclaimerNote: 'As imagens presentes no site são meramente ilustrativas.',
     privacy: 'Política de Privacidade',
     copyright: '2026 © Gestão do Condado',
   },
   EN: {
     disclaimer: 'All materials, finishes and equipment described in this plan are subject to adjustment / alteration, namely due to technical, legal, architectural, commercial or supply requirements, as well as by imposition of licensing entities or compatibility needs between architecture and specialty execution projects, without, however, these adjustments / alterations having implications on the quality level of the materials, finishes and equipment provided in this plan.',
+    disclaimerNote: 'The images on this website are merely illustrative.',
     privacy: 'Privacy Policy',
     copyright: '2026 © Gestão do Condado',
   },
@@ -45,7 +47,7 @@ export function Footer() {
               className="text-[#F5F0E8]/50 text-center mb-8"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px', lineHeight: '1.6' }}
             >
-              {t.disclaimer}
+              {t.disclaimer}{' '}<strong>{t.disclaimerNote}</strong>
             </p>
 
             {/* Divider */}
