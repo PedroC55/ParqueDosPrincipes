@@ -51,7 +51,7 @@ export function MasterplanSection({ planImage }: MasterplanSectionProps) {
             <img
               src={planImage}
               alt="Masterplan"
-              className="w-full h-auto shadow-2xl"
+              className="w-full h-auto"
             />
           </motion.div>
 

@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { motion } from 'motion/react';
+import { useState, useEffect, useCallback } from 'react';
+import { ChevronLeft, ChevronRight, X, Plus } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useInView } from './hooks/useInView';
 import { useLanguage } from '../context/LanguageContext';
 import parqueLogo from '../../Assets/Logos/logo_parque_dos_principes_dourado.png';
@@ -37,10 +37,15 @@ interface GallerySectionProps {
   };
 }
 
+interface LightboxState {
+  categoryIndex: number;
+  imageIndex: number;
+}
+
 export function GallerySection({ images }: GallerySectionProps) {
   const [ref, isInView] = useInView({ threshold: 0.2 });
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const [lightbox, setLightbox] = useState<LightboxState | null>(null);
   const { lang } = useLanguage();
   const t = translations[lang];
 
@@ -59,111 +64,231 @@ export function GallerySection({ images }: GallerySectionProps) {
     setCurrentIndex((prev) => (prev === categories.length - 1 ? 0 : prev + 1));
   };
 
-  return (
-    <section
-      id="gallery"
-      ref={ref}
-      className="w-full bg-[#1C1C1C] py-16 lg:py-24"
-    >
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.8 }}
-          className="mb-12"
-        >
-          <div
-            className="text-[#C9A84C] mb-4 tracking-[0.2em]"
-            style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
-          >
-            {t.label}
-          </div>
-          <h2
-            className="text-[#F5F0E8]"
-            style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 600 }}
-          >
-            {t.title}
-          </h2>
-        </motion.div>
+  const openLightbox = (categoryIndex: number, imageIndex = 0) => {
+    setLightbox({ categoryIndex, imageIndex });
+  };
 
-        <div className="grid lg:grid-cols-5 gap-4 lg:gap-6">
-          {/* Info Panel */}
+  const closeLightbox = useCallback(() => setLightbox(null), []);
+
+  const lightboxPrev = useCallback(() => {
+    setLightbox((prev) => {
+      if (!prev) return null;
+      const cat = categories[prev.categoryIndex];
+      return {
+        ...prev,
+        imageIndex: prev.imageIndex === 0 ? cat.images.length - 1 : prev.imageIndex - 1,
+      };
+    });
+  }, [categories]);
+
+  const lightboxNext = useCallback(() => {
+    setLightbox((prev) => {
+      if (!prev) return null;
+      const cat = categories[prev.categoryIndex];
+      return {
+        ...prev,
+        imageIndex: prev.imageIndex === cat.images.length - 1 ? 0 : prev.imageIndex + 1,
+      };
+    });
+  }, [categories]);
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') lightboxPrev();
+      if (e.key === 'ArrowRight') lightboxNext();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [lightbox, closeLightbox, lightboxPrev, lightboxNext]);
+
+  return (
+    <>
+      <section
+        id="gallery"
+        ref={ref}
+        className="w-full bg-[#1C1C1C] py-16 lg:py-24"
+      >
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="bg-[#2D6B79] p-8 flex flex-col justify-between pb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ duration: 0.8 }}
+            className="mb-12"
           >
-            <img src={parqueLogo} alt="Parque dos Príncipes" className="h-14 w-auto object-contain self-start mt-8" />
-            <div>
-              <p
-                className="text-white/90 mb-6"
-                style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.7' }}
-              >
-                {t.welcome} <strong>{t.highlight}</strong>{t.welcomeEnd}
-              </p>
-              <p
-                className="text-white/70"
-                style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.6' }}
-              >
-                {t.address1}<br />{t.address2}
-              </p>
+            <div
+              className="text-[#C9A84C] mb-4 tracking-[0.2em]"
+              style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
+            >
+              {t.label}
             </div>
+            <h2
+              className="text-[#F5F0E8]"
+              style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 600 }}
+            >
+              {t.title}
+            </h2>
           </motion.div>
 
-          {/* Gallery Grid */}
-          {categories.map((category, index) => (
+          <div className="grid lg:grid-cols-5 gap-4 lg:gap-6 items-start">
+            {/* Info Panel */}
             <motion.div
-              key={category.name}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.8, delay: 0.2 + index * 0.1 }}
-              className="relative h-[300px] lg:h-[400px] overflow-hidden cursor-pointer group"
-              onMouseEnter={() => setHoveredCategory(category.name)}
-              onMouseLeave={() => setHoveredCategory(null)}
+              initial={{ opacity: 0, x: -30 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="bg-[#2D6B79] p-8 flex flex-col justify-between"
+              style={{ minHeight: '400px' }}
             >
-              <img
-                src={category.images[0]}
-                alt={category.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              <div
-                className={`absolute inset-0 bg-black/60 flex items-center justify-center transition-opacity duration-300 ${
-                  hoveredCategory === category.name ? 'opacity-100' : 'opacity-0'
-                }`}
-              >
-                <div
-                  className="text-[#C9A84C] tracking-[0.15em]"
-                  style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px' }}
+              <img src={parqueLogo} alt="Parque dos Príncipes" className="h-14 w-auto object-contain self-start mt-8" />
+              <div>
+                <p
+                  className="text-white/90 mb-6"
+                  style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.7' }}
                 >
-                  {category.name}
-                </div>
+                  {t.welcome} <strong>{t.highlight}</strong>{t.welcomeEnd}
+                </p>
+                <p
+                  className="text-white/70"
+                  style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.6' }}
+                >
+                  {t.address1}<br />{t.address2}
+                </p>
               </div>
             </motion.div>
-          ))}
-        </div>
 
-        {/* Navigation Arrows */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex justify-center gap-4 mt-8"
-        >
-          <button
-            onClick={handlePrev}
-            className="w-12 h-12 border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#1C1C1C] transition-all duration-300 flex items-center justify-center"
+            {/* Gallery Cards */}
+            {categories.map((category, index) => (
+              <motion.div
+                key={category.name}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{ duration: 0.8, delay: 0.2 + index * 0.1 }}
+                className="flex flex-col"
+              >
+                {/* Image card com label e + sobrepostos */}
+                <div
+                  className="relative h-[300px] lg:h-[400px] overflow-hidden cursor-pointer group"
+                  onClick={() => openLightbox(index)}
+                >
+                  <img
+                    src={category.images[0]}
+                    alt={category.name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  {/* overlay + label + botão — só aparecem no hover */}
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-end pb-10 gap-4">
+                    <span
+                      className="text-[#C9A84C] tracking-[0.15em]"
+                      style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', fontWeight: 700 }}
+                    >
+                      {category.name}
+                    </span>
+                    <button
+                      aria-label={`Ver ${category.name}`}
+                      className="w-10 h-10 rounded-full border-2 border-white/60 text-white flex items-center justify-center hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all duration-300 bg-black/20"
+                    >
+                      <Plus size={18} />
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Navigation Arrows */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex justify-center gap-4 mt-8"
           >
-            <ChevronLeft size={20} />
-          </button>
-          <button
-            onClick={handleNext}
-            className="w-12 h-12 border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#1C1C1C] transition-all duration-300 flex items-center justify-center"
+            <button
+              onClick={handlePrev}
+              className="w-12 h-12 border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#1C1C1C] transition-all duration-300 flex items-center justify-center"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <button
+              onClick={handleNext}
+              className="w-12 h-12 border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#1C1C1C] transition-all duration-300 flex items-center justify-center"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Lightbox */}
+      <AnimatePresence>
+        {lightbox && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center"
+            style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={closeLightbox}
           >
-            <ChevronRight size={20} />
-          </button>
-        </motion.div>
-      </div>
-    </section>
+            {/* Close button */}
+            <button
+              onClick={closeLightbox}
+              className="absolute top-6 right-8 text-white/70 hover:text-white transition-colors z-10"
+              aria-label="Fechar"
+            >
+              <X size={28} />
+            </button>
+
+            {/* Prev arrow */}
+            <button
+              onClick={(e) => { e.stopPropagation(); lightboxPrev(); }}
+              className="absolute left-6 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors z-10"
+              aria-label="Anterior"
+            >
+              <ChevronLeft size={48} strokeWidth={1.5} />
+            </button>
+
+            {/* Image */}
+            <motion.div
+              key={`${lightbox.categoryIndex}-${lightbox.imageIndex}`}
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="relative mx-20"
+              onClick={(e) => e.stopPropagation()}
+              style={{ maxWidth: '80vw', maxHeight: '85vh' }}
+            >
+              <img
+                src={categories[lightbox.categoryIndex].images[lightbox.imageIndex]}
+                alt={categories[lightbox.categoryIndex].name}
+                className="object-contain rounded"
+                style={{ maxWidth: '80vw', maxHeight: '85vh' }}
+              />
+            </motion.div>
+
+            {/* Next arrow */}
+            <button
+              onClick={(e) => { e.stopPropagation(); lightboxNext(); }}
+              className="absolute right-6 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors z-10"
+              aria-label="Próximo"
+            >
+              <ChevronRight size={48} strokeWidth={1.5} />
+            </button>
+
+            {/* Image counter */}
+            {categories[lightbox.categoryIndex].images.length > 1 && (
+              <div
+                className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50"
+                style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px', letterSpacing: '0.1em' }}
+              >
+                {lightbox.imageIndex + 1} / {categories[lightbox.categoryIndex].images.length}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

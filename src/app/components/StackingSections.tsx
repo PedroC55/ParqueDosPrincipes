@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import imgHall from '../../Assets/Images/HALL_V1_FINAL.png';
-import imgPiscina from '../../Assets/Images/POOL_V1_FINAL.png';
-import imgGinasio from '../../Assets/Images/GYM_V1_FINAL.png';
-import imgJardim from '../../Assets/Images/JARDIM01_V1_FINAL.png';
-import imgGaragem from '../../Assets/Images/GARAGE_V1_FINAL.png';
+import imgHall from '../../Assets/Images/HALL_V2_FINAL.png';
+import imgPiscina from '../../Assets/Images/POOL_V2_FINAL.png';
+import imgGinasio from '../../Assets/Images/GYM_V2_FINAL.png';
+import imgJardim from '../../Assets/Images/JARDIM01_V2_FINAL.png';
+import imgGaragem from '../../Assets/Images/GARAGE_V2_FINAL.png';
 
 const css = `
   .stacking-wrapper {
