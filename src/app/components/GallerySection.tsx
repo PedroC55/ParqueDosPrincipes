@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight, X, Plus } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useMotionValue, animate } from 'motion/react';
 import { useInView } from './hooks/useInView';
 import { useLanguage } from '../context/LanguageContext';
 import parqueLogo from '../../Assets/Logos/logo_parque_dos_principes_dourado.png';
@@ -14,7 +14,8 @@ const translations = {
     welcomeEnd: ', surge uma nova forma de viver - Parque dos Príncipes Residence.',
     address1: 'Luanda - Camama',
     address2: 'Rua das artes, lote 10',
-    categories: ['EXTERIOR', 'INTERIOR', 'AMENIDADES', 'VISTAS'],
+    // mesma ordem que galleryImages em App.tsx
+    imageLabels: ['EXTERIOR', 'JARDIM', 'JARDIM', 'PISCINA', 'GINÁSIO', 'BAR', 'SALÃO DE JOGOS', 'INTERIOR', 'GARAGEM'],
   },
   EN: {
     label: 'GALLERY',
@@ -24,76 +25,88 @@ const translations = {
     welcomeEnd: ', a new way of living emerges - Parque dos Príncipes Residence.',
     address1: 'Luanda - Camama',
     address2: 'Rua das artes, lote 10',
-    categories: ['EXTERIOR', 'INTERIOR', 'AMENITIES', 'VIEWS'],
+    imageLabels: ['EXTERIOR', 'GARDEN', 'GARDEN', 'POOL', 'GYM', 'BAR', 'GAMES ROOM', 'INTERIOR', 'GARAGE'],
   },
 };
 
 interface GallerySectionProps {
-  images: {
-    exterior: string[];
-    interior: string[];
-    amenities: string[];
-    views: string[];
-  };
+  images: string[];
 }
 
-interface LightboxState {
-  categoryIndex: number;
-  imageIndex: number;
-}
+const VISIBLE = 4;
+const GAP = 16; // px — gap entre cards dentro do carousel
 
 export function GallerySection({ images }: GallerySectionProps) {
   const [ref, isInView] = useInView({ threshold: 0.2 });
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [lightbox, setLightbox] = useState<LightboxState | null>(null);
+  const [startIndex, setStartIndex] = useState(0);
+  const [cardWidth, setCardWidth] = useState(0);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const { lang } = useLanguage();
   const t = translations[lang];
 
-  const categories = [
-    { name: t.categories[0], images: images.exterior },
-    { name: t.categories[1], images: images.interior },
-    { name: t.categories[2], images: images.amenities },
-    { name: t.categories[3], images: images.views },
-  ];
+  const containerRef = useRef<HTMLDivElement>(null);
+  const animating = useRef(false);
+  const x = useMotionValue(0);
 
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? categories.length - 1 : prev - 1));
-  };
+  // Calcula a largura de cada card e define a posição inicial da track
+  useEffect(() => {
+    const calc = () => {
+      if (!containerRef.current) return;
+      const cw = (containerRef.current.offsetWidth - (VISIBLE - 1) * GAP) / VISIBLE;
+      setCardWidth(cw);
+      x.set(-(cw + GAP)); // esconde o card "prev" à esquerda
+    };
+    calc();
+    window.addEventListener('resize', calc);
+    return () => window.removeEventListener('resize', calc);
+  }, [x]);
 
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev === categories.length - 1 ? 0 : prev + 1));
-  };
-
-  const openLightbox = (categoryIndex: number, imageIndex = 0) => {
-    setLightbox({ categoryIndex, imageIndex });
-  };
-
-  const closeLightbox = useCallback(() => setLightbox(null), []);
-
-  const lightboxPrev = useCallback(() => {
-    setLightbox((prev) => {
-      if (!prev) return null;
-      const cat = categories[prev.categoryIndex];
-      return {
-        ...prev,
-        imageIndex: prev.imageIndex === 0 ? cat.images.length - 1 : prev.imageIndex - 1,
-      };
+  const handleNext = async () => {
+    if (animating.current || cardWidth === 0) return;
+    animating.current = true;
+    const initX = -(cardWidth + GAP);
+    await animate(x, initX - (cardWidth + GAP), {
+      duration: 0.45,
+      ease: [0.4, 0, 0.2, 1],
     });
-  }, [categories]);
+    x.set(initX); // snap invisível de volta à posição base
+    setStartIndex((prev) => (prev + 1) % images.length);
+    animating.current = false;
+  };
 
-  const lightboxNext = useCallback(() => {
-    setLightbox((prev) => {
-      if (!prev) return null;
-      const cat = categories[prev.categoryIndex];
-      return {
-        ...prev,
-        imageIndex: prev.imageIndex === cat.images.length - 1 ? 0 : prev.imageIndex + 1,
-      };
+  const handlePrev = async () => {
+    if (animating.current || cardWidth === 0) return;
+    animating.current = true;
+    const initX = -(cardWidth + GAP);
+    await animate(x, 0, {
+      duration: 0.45,
+      ease: [0.4, 0, 0.2, 1],
     });
-  }, [categories]);
+    x.set(initX); // snap invisível
+    setStartIndex((prev) => (prev - 1 + images.length) % images.length);
+    animating.current = false;
+  };
+
+  // Renderiza VISIBLE + 2 cards: 1 escondido à esquerda + 4 visíveis + 1 escondido à direita
+  const totalCards = VISIBLE + 2;
+  const cardsToRender = Array.from({ length: totalCards }, (_, i) =>
+    (startIndex - 1 + i + images.length) % images.length
+  );
+
+  // Lightbox
+  const openLightbox = (index: number) => setLightboxIndex(index);
+  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+  const lightboxPrev = useCallback(() =>
+    setLightboxIndex((p) => (p === null ? null : (p - 1 + images.length) % images.length)),
+    [images.length]
+  );
+  const lightboxNext = useCallback(() =>
+    setLightboxIndex((p) => (p === null ? null : (p + 1) % images.length)),
+    [images.length]
+  );
 
   useEffect(() => {
-    if (!lightbox) return;
+    if (lightboxIndex === null) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowLeft') lightboxPrev();
@@ -101,16 +114,14 @@ export function GallerySection({ images }: GallerySectionProps) {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [lightbox, closeLightbox, lightboxPrev, lightboxNext]);
+  }, [lightboxIndex, closeLightbox, lightboxPrev, lightboxNext]);
 
   return (
     <>
-      <section
-        id="gallery"
-        ref={ref}
-        className="w-full bg-[#1C1C1C] py-16 lg:py-24"
-      >
+      <section id="gallery" ref={ref} className="w-full bg-[#1C1C1C] py-16 lg:py-24">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
+
+          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -131,19 +142,24 @@ export function GallerySection({ images }: GallerySectionProps) {
             </h2>
           </motion.div>
 
-          <div className="grid lg:grid-cols-5 gap-4 lg:gap-6 items-start">
+          {/* Info panel + Carousel */}
+          <div className="grid lg:grid-cols-5 gap-4 lg:gap-6">
+
             {/* Info Panel */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="bg-[#2D6B79] p-8 flex flex-col justify-between"
-              style={{ minHeight: '400px' }}
+              className="bg-[#2D6B79] p-8 flex flex-col justify-between h-[300px] lg:h-[400px]"
             >
-              <img src={parqueLogo} alt="Parque dos Príncipes" className="h-14 w-auto object-contain self-start mt-8" />
+              <img
+                src={parqueLogo}
+                alt="Parque dos Príncipes"
+                className="h-14 w-auto object-contain self-start mt-4"
+              />
               <div>
                 <p
-                  className="text-white/90 mb-6"
+                  className="text-white/90 mb-4"
                   style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.7' }}
                 >
                   {t.welcome} <strong>{t.highlight}</strong>{t.welcomeEnd}
@@ -157,50 +173,61 @@ export function GallerySection({ images }: GallerySectionProps) {
               </div>
             </motion.div>
 
-            {/* Gallery Cards */}
-            {categories.map((category, index) => (
-              <motion.div
-                key={category.name}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                transition={{ duration: 0.8, delay: 0.2 + index * 0.1 }}
-                className="flex flex-col"
-              >
-                {/* Image card com label e + sobrepostos */}
-                <div
-                  className="relative h-[300px] lg:h-[400px] overflow-hidden cursor-pointer group"
-                  onClick={() => openLightbox(index)}
+            {/* Carousel */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              ref={containerRef}
+              className="lg:col-span-4 relative h-[300px] lg:h-[400px] overflow-hidden"
+            >
+              {cardWidth > 0 && (
+                <motion.div
+                  style={{ x }}
+                  className="flex h-full"
                 >
-                  <img
-                    src={category.images[0]}
-                    alt={category.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  {/* overlay + label + botão — só aparecem no hover */}
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-end pb-10 gap-4">
-                    <span
-                      className="text-[#C9A84C] tracking-[0.15em]"
-                      style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', fontWeight: 700 }}
+                  {cardsToRender.map((imgIndex, i) => (
+                    <div
+                      key={i}
+                      className="flex-shrink-0 relative h-full overflow-hidden cursor-pointer group"
+                      style={{
+                        width: cardWidth,
+                        marginRight: i < totalCards - 1 ? GAP : 0,
+                      }}
+                      onClick={() => openLightbox(imgIndex)}
                     >
-                      {category.name}
-                    </span>
-                    <button
-                      aria-label={`Ver ${category.name}`}
-                      className="w-10 h-10 rounded-full border-2 border-white/60 text-white flex items-center justify-center hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all duration-300 bg-black/20"
-                    >
-                      <Plus size={18} />
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                      <img
+                        src={images[imgIndex]}
+                        alt={`Galeria ${imgIndex + 1}`}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      {/* Hover overlay */}
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-end pb-8 gap-4">
+                        <span
+                          className="text-[#C9A84C] tracking-[0.15em]"
+                          style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', fontWeight: 700 }}
+                        >
+                          {t.imageLabels[imgIndex]}
+                        </span>
+                        <button
+                          aria-label="Ver imagem"
+                          className="w-10 h-10 rounded-full border-2 border-white/60 text-white flex items-center justify-center hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all duration-300 bg-black/20"
+                        >
+                          <Plus size={18} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+            </motion.div>
           </div>
 
           {/* Navigation Arrows */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
             className="flex justify-center gap-4 mt-8"
           >
             <button
@@ -216,12 +243,13 @@ export function GallerySection({ images }: GallerySectionProps) {
               <ChevronRight size={20} />
             </button>
           </motion.div>
+
         </div>
       </section>
 
       {/* Lightbox */}
       <AnimatePresence>
-        {lightbox && (
+        {lightboxIndex !== null && (
           <motion.div
             className="fixed inset-0 z-50 flex items-center justify-center"
             style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}
@@ -231,61 +259,45 @@ export function GallerySection({ images }: GallerySectionProps) {
             transition={{ duration: 0.25 }}
             onClick={closeLightbox}
           >
-            {/* Close button */}
             <button
               onClick={closeLightbox}
               className="absolute top-6 right-8 text-white/70 hover:text-white transition-colors z-10"
-              aria-label="Fechar"
             >
               <X size={28} />
             </button>
-
-            {/* Prev arrow */}
             <button
               onClick={(e) => { e.stopPropagation(); lightboxPrev(); }}
               className="absolute left-6 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors z-10"
-              aria-label="Anterior"
             >
               <ChevronLeft size={48} strokeWidth={1.5} />
             </button>
-
-            {/* Image */}
             <motion.div
-              key={`${lightbox.categoryIndex}-${lightbox.imageIndex}`}
+              key={lightboxIndex}
               initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="relative mx-20"
+              className="mx-20"
               onClick={(e) => e.stopPropagation()}
-              style={{ maxWidth: '80vw', maxHeight: '85vh' }}
             >
               <img
-                src={categories[lightbox.categoryIndex].images[lightbox.imageIndex]}
-                alt={categories[lightbox.categoryIndex].name}
+                src={images[lightboxIndex]}
+                alt={`Galeria ${lightboxIndex + 1}`}
                 className="object-contain rounded"
                 style={{ maxWidth: '80vw', maxHeight: '85vh' }}
               />
             </motion.div>
-
-            {/* Next arrow */}
             <button
               onClick={(e) => { e.stopPropagation(); lightboxNext(); }}
               className="absolute right-6 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors z-10"
-              aria-label="Próximo"
             >
               <ChevronRight size={48} strokeWidth={1.5} />
             </button>
-
-            {/* Image counter */}
-            {categories[lightbox.categoryIndex].images.length > 1 && (
-              <div
-                className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50"
-                style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px', letterSpacing: '0.1em' }}
-              >
-                {lightbox.imageIndex + 1} / {categories[lightbox.categoryIndex].images.length}
-              </div>
-            )}
+            <div
+              className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50"
+              style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px', letterSpacing: '0.1em' }}
+            >
+              {lightboxIndex + 1} / {images.length}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

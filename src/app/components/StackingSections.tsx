@@ -5,6 +5,7 @@ import imgPiscina from '../../Assets/Images/POOL_V2_FINAL.png';
 import imgGinasio from '../../Assets/Images/GYM_V2_FINAL.png';
 import imgJardim from '../../Assets/Images/JARDIM01_V2_FINAL.png';
 import imgGaragem from '../../Assets/Images/GARAGE_V2_FINAL.png';
+import imgBar from '../../Assets/Images/BAR_V2_FINAL.png';
 
 const css = `
   .stacking-wrapper {
@@ -245,7 +246,7 @@ export function StackingSections() {
 
         {/* Panel 3 — Refúgio de luxo: Text LEFT / Image RIGHT */}
         <div className="stacking-section section-3">
-          <img src={imgPiscina} alt={t.section3.label} className="image-side" />
+          <img src={imgBar} alt={t.section3.label} className="image-side" />
           <div className="text-side">
             <TextBlock {...t.section3} />
           </div>

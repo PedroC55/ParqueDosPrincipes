@@ -78,6 +78,7 @@ const css = `
     transform: translateY(30px);
     transition: opacity 0.8s ease var(--delay, 0s),
                 transform 0.8s ease var(--delay, 0s);
+                
   }
 
   .reveal-content.visible .reveal-word {

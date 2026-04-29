@@ -8,6 +8,8 @@ import imgSalaoJogos from '../Assets/Images/SJOGOS_FINAL_V2.png';
 import imgJardim from '../Assets/Images/JARDIM01_V2_FINAL.png';
 import imgMasterplan from '../Assets/Images/TOP_V2_FINAL.png';
 import imgHall from '../Assets/Images/HALL_V2_FINAL.png';
+import imgFachada from '../Assets/Images/FACHADA_V1_FINAL.png';
+import imgGaragem from '../Assets/Images/GARAGE_V2_FINAL.png';
 import { Navigation } from './components/Navigation';
 import { HeroSection } from './components/HeroSection';
 import { IntroSection } from './components/IntroSection';
@@ -30,13 +32,18 @@ export default function App() {
     };
   }, []);
 
-  // Gallery images organized by category
-  const galleryImages = {
-    exterior: [imgJardim],
-    interior: [imgHall],
-    amenities: [imgPiscina],
-    views: [imgEspreguicadeiras],
-  };
+  // Todas as fotos da galeria (9 imagens, sem a TOP/masterplan)
+  const galleryImages = [
+    imgFachada,
+    imgJardim,
+    imgEspreguicadeiras,
+    imgPiscina,
+    imgGinasio,
+    imgBar,
+    imgSalaoJogos,
+    imgHall,
+    imgGaragem,
+  ];
 
   return (
     <LanguageProvider>
