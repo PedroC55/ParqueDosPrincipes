@@ -52,6 +52,8 @@ export function MasterplanSection({ planImage }: MasterplanSectionProps) {
               src={planImage}
               alt="Masterplan"
               className="w-full h-auto"
+              loading="lazy"
+              decoding="async"
             />
           </motion.div>
 

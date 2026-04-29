@@ -200,6 +200,8 @@ export function GallerySection({ images }: GallerySectionProps) {
                         src={images[imgIndex]}
                         alt={`Galeria ${imgIndex + 1}`}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        loading="lazy"
+                        decoding="async"
                       />
                       {/* Hover overlay */}
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-end pb-8 gap-4">

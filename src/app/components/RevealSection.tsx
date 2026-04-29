@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import imgBackground from '../../Assets/Images/FACHADA_V1_FINAL.png';
+import imgBackground from '../../Assets/Images/FACHADA_V1_FINAL.webp';
 
 const css = `
   .reveal-section {

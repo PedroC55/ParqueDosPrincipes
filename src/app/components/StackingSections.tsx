@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import imgHall from '../../Assets/Images/HALL_V2_FINAL.png';
-import imgPiscina from '../../Assets/Images/POOL_V2_FINAL.png';
-import imgGinasio from '../../Assets/Images/GYM_V2_FINAL.png';
-import imgJardim from '../../Assets/Images/JARDIM01_V2_FINAL.png';
-import imgGaragem from '../../Assets/Images/GARAGE_V2_FINAL.png';
-import imgBar from '../../Assets/Images/BAR_V2_FINAL.png';
+import imgHall from '../../Assets/Images/HALL_V2_FINAL.webp';
+import imgPiscina from '../../Assets/Images/POOL_V2_FINAL.webp';
+import imgGinasio from '../../Assets/Images/GYM_V2_FINAL.webp';
+import imgJardim from '../../Assets/Images/JARDIM01_V2_FINAL.webp';
+import imgGaragem from '../../Assets/Images/GARAGE_V2_FINAL.webp';
+import imgBar from '../../Assets/Images/BAR_V2_FINAL.webp';
 
 const css = `
   .stacking-wrapper {
@@ -230,7 +230,7 @@ export function StackingSections() {
 
         {/* Panel 1 — Segurança e Conforto: Text LEFT / Image RIGHT */}
         <div className="stacking-section section-1">
-          <img src={imgHall} alt={t.section1.label} className="image-side" />
+          <img src={imgHall} alt={t.section1.label} className="image-side" loading="lazy" decoding="async" />
           <div className="text-side">
             <TextBlock {...t.section1} />
           </div>
@@ -238,7 +238,7 @@ export function StackingSections() {
 
         {/* Panel 2 — Viver em Harmonia Verde: Image LEFT / Text RIGHT */}
         <div className="stacking-section section-2">
-          <img src={imgPiscina} alt={t.section4.label} className="image-side" />
+          <img src={imgPiscina} alt={t.section4.label} className="image-side" loading="lazy" decoding="async" />
           <div className="text-side">
             <TextBlock {...t.section2} />
           </div>
@@ -246,7 +246,7 @@ export function StackingSections() {
 
         {/* Panel 3 — Refúgio de luxo: Text LEFT / Image RIGHT */}
         <div className="stacking-section section-3">
-          <img src={imgBar} alt={t.section3.label} className="image-side" />
+          <img src={imgBar} alt={t.section3.label} className="image-side" loading="lazy" decoding="async" />
           <div className="text-side">
             <TextBlock {...t.section3} />
           </div>
@@ -254,7 +254,7 @@ export function StackingSections() {
 
         {/* Panel 4 — Acabamentos: Text LEFT / Image RIGHT (dark) */}
         <div className="stacking-section section-4">
-          <img src={imgGinasio} alt={t.section4.label} className="image-side" />
+          <img src={imgGinasio} alt={t.section4.label} className="image-side" loading="lazy" decoding="async" />
           <div className="text-side">
             <TextBlock {...t.section4} dark />
           </div>
@@ -262,7 +262,7 @@ export function StackingSections() {
 
         {/* Panel 5 — Natureza: Image LEFT / Text RIGHT */}
         <div className="stacking-section section-5">
-          <img src={imgJardim} alt={t.section5.label} className="image-side" />
+          <img src={imgJardim} alt={t.section5.label} className="image-side" loading="lazy" decoding="async" />
           <div className="text-side">
             <TextBlock {...t.section5} />
           </div>
@@ -270,7 +270,7 @@ export function StackingSections() {
 
         {/* Panel 6 — Garagem: Text LEFT / Image RIGHT */}
         <div className="stacking-section section-6">
-          <img src={imgGaragem} alt={t.section6.label} className="image-side" />
+          <img src={imgGaragem} alt={t.section6.label} className="image-side" loading="lazy" decoding="async" />
           <div className="text-side">
             <TextBlock {...t.section6} />
           </div>

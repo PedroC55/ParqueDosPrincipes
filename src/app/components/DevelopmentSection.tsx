@@ -43,11 +43,15 @@ export function DevelopmentSection({ image1, image2 }: DevelopmentSectionProps) 
           src={image1}
           alt="Interior detail"
           className="w-full h-[300px] md:h-[400px] object-cover"
+          loading="lazy"
+          decoding="async"
         />
         <img
           src={image2}
           alt="Interior detail"
           className="w-full h-[300px] md:h-[400px] object-cover"
+          loading="lazy"
+          decoding="async"
         />
       </motion.div>
 
