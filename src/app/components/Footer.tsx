@@ -56,23 +56,25 @@ export function Footer() {
 
             {/* Divider + Bottom Bar */}
             <div className="border-t border-white/10 pt-6">
-              <div className="grid grid-cols-3 items-center text-[#F5F0E8]/50">
-                <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}>
+              {/* Mobile: coluna centrada | Desktop: 3 colunas */}
+              <div className="flex flex-col items-center gap-5 md:grid md:grid-cols-3 md:items-center md:gap-0 text-[#F5F0E8]/50">
+
+                <span className="text-center md:text-left" style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}>
                   {t.copyright}
                 </span>
 
-                {/* Logos Renato Neto + Hubduction — divider centrado na página */}
-                <div className="flex items-center justify-center gap-6">
+                {/* Logos Renato Neto + Hubduction */}
+                <div className="flex items-center justify-center gap-5">
                   <a href="https://renatonetovisuals.com/welcome" target="_blank" rel="noopener noreferrer">
-                    <img src={renatoNetoLogo} alt="Renato Neto" className="h-7 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity" />
+                    <img src={renatoNetoLogo} alt="Renato Neto" className="h-6 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity" />
                   </a>
                   <div className="w-px h-5 bg-white/20" />
                   <a href="https://www.hubduction.com/inicio" target="_blank" rel="noopener noreferrer">
-                    <img src={hubductionLogo} alt="Hubduction" className="h-7 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity" />
+                    <img src={hubductionLogo} alt="Hubduction" className="h-6 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity" />
                   </a>
                 </div>
 
-                <div className="flex items-center justify-end gap-6">
+                <div className="flex items-center justify-center md:justify-end gap-4 flex-wrap">
                   <button
                     className="hover:text-[#C9A84C] transition-colors"
                     style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}

@@ -33,13 +33,13 @@ interface GallerySectionProps {
   images: string[];
 }
 
-const VISIBLE = 4;
-const GAP = 16; // px — gap entre cards dentro do carousel
+const GAP = 16; // px — gap entre cards no desktop
 
 export function GallerySection({ images }: GallerySectionProps) {
   const [ref, isInView] = useInView({ threshold: 0.2 });
   const [startIndex, setStartIndex] = useState(0);
   const [cardWidth, setCardWidth] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(4);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const { lang } = useLanguage();
   const t = translations[lang];
@@ -48,28 +48,32 @@ export function GallerySection({ images }: GallerySectionProps) {
   const animating = useRef(false);
   const x = useMotionValue(0);
 
-  // Calcula a largura de cada card e define a posição inicial da track
+  // Calcula largura do card e visíveis consoante o viewport
   useEffect(() => {
     const calc = () => {
       if (!containerRef.current) return;
-      const cw = (containerRef.current.offsetWidth - (VISIBLE - 1) * GAP) / VISIBLE;
+      const isMobile = window.innerWidth < 1024;
+      const vc = isMobile ? 1 : 4;
+      const gap = isMobile ? 0 : GAP;
+      const cw = (containerRef.current.offsetWidth - (vc - 1) * gap) / vc;
+      setVisibleCount(vc);
       setCardWidth(cw);
-      x.set(-(cw + GAP)); // esconde o card "prev" à esquerda
+      x.set(-(cw + gap)); // esconde o card "prev" à esquerda
     };
     calc();
     window.addEventListener('resize', calc);
     return () => window.removeEventListener('resize', calc);
   }, [x]);
 
+  const effectiveGap = visibleCount === 1 ? 0 : GAP;
+
   const handleNext = async () => {
     if (animating.current || cardWidth === 0) return;
     animating.current = true;
-    const initX = -(cardWidth + GAP);
-    await animate(x, initX - (cardWidth + GAP), {
-      duration: 0.45,
-      ease: [0.4, 0, 0.2, 1],
-    });
-    x.set(initX); // snap invisível de volta à posição base
+    const step = cardWidth + effectiveGap;
+    const initX = -step;
+    await animate(x, initX - step, { duration: 0.45, ease: [0.4, 0, 0.2, 1] });
+    x.set(initX);
     setStartIndex((prev) => (prev + 1) % images.length);
     animating.current = false;
   };
@@ -77,18 +81,16 @@ export function GallerySection({ images }: GallerySectionProps) {
   const handlePrev = async () => {
     if (animating.current || cardWidth === 0) return;
     animating.current = true;
-    const initX = -(cardWidth + GAP);
-    await animate(x, 0, {
-      duration: 0.45,
-      ease: [0.4, 0, 0.2, 1],
-    });
-    x.set(initX); // snap invisível
+    const step = cardWidth + effectiveGap;
+    const initX = -step;
+    await animate(x, 0, { duration: 0.45, ease: [0.4, 0, 0.2, 1] });
+    x.set(initX);
     setStartIndex((prev) => (prev - 1 + images.length) % images.length);
     animating.current = false;
   };
 
-  // Renderiza VISIBLE + 2 cards: 1 escondido à esquerda + 4 visíveis + 1 escondido à direita
-  const totalCards = VISIBLE + 2;
+  // 1 escondido à esquerda + visíveis + 1 escondido à direita
+  const totalCards = visibleCount + 2;
   const cardsToRender = Array.from({ length: totalCards }, (_, i) =>
     (startIndex - 1 + i + images.length) % images.length
   );
@@ -192,7 +194,7 @@ export function GallerySection({ images }: GallerySectionProps) {
                       className="flex-shrink-0 relative h-full overflow-hidden cursor-pointer group"
                       style={{
                         width: cardWidth,
-                        marginRight: i < totalCards - 1 ? GAP : 0,
+                        marginRight: i < totalCards - 1 ? effectiveGap : 0,
                       }}
                       onClick={() => openLightbox(imgIndex)}
                     >
