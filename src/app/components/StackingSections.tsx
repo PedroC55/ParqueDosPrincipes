@@ -66,11 +66,10 @@ const css = `
 
   @media (max-width: 768px) {
     .stacking-wrapper {
-      height: auto;
+      height: 600dvh;
     }
     .stacking-section {
-      position: relative;
-      height: auto;
+      height: 100dvh;
       flex-direction: column;
     }
     .section-1,
@@ -81,11 +80,14 @@ const css = `
     }
     .stacking-section .image-side {
       width: 100%;
-      height: 56vw;
+      height: 42dvh;
+      flex-shrink: 0;
     }
     .stacking-section .text-side {
       width: 100%;
-      padding: 40px 24px;
+      padding: 28px 20px;
+      flex: 1;
+      overflow-y: auto;
     }
   }
 `;
