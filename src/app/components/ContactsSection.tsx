@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import { useInView } from './hooks/useInView';
-import { Mail, Phone } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import emailjs from '@emailjs/browser';
 import instagramIcon from '../../Assets/Logos/instagram.svg';
@@ -9,7 +8,7 @@ import facebookIcon from '../../Assets/Logos/facebook.svg';
 
 const translations = {
   PT: {
-    label: 'CONTACTOS', title: 'Entre em Contacto',
+    label: 'CONTACTOS', title: 'Camama . Talatona . Luanda',
     nome: 'Nome *', pais: 'País *', telefone: 'Telefone *', email: 'Email *',
     tipologia: 'Tipologia', preco: 'Faixa de Preço', mensagem: 'Mensagem',
     select: 'Selecione...',
@@ -18,7 +17,7 @@ const translations = {
     submit: 'Enviar', sending: 'A enviar...', success: 'Mensagem enviada com sucesso!', error: 'Ocorreu um erro. Tente novamente.',
   },
   EN: {
-    label: 'CONTACTS', title: 'Get in Touch',
+    label: 'CONTACTS', title: 'Camama . Talatona . Luanda',
     nome: 'Name *', pais: 'Country *', telefone: 'Phone *', email: 'Email *',
     tipologia: 'Typology', preco: 'Price Range', mensagem: 'Message',
     select: 'Select...',
@@ -99,119 +98,48 @@ export function ContactsSection() {
           </div>
           <h2
             className="text-[#2C2C2C] mb-8"
-            style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 600 }}
+            style={{ fontFamily: 'Lato, sans-serif', fontSize: 'clamp(1rem, 3vw, 1.4rem)', fontWeight: 400, letterSpacing: '0.12em' }}
           >
             {t.title}
           </h2>
 
-          {/* Contact Info — desktop: socials flanking email/phone column; mobile: email, phone, socials stacked */}
-          <div className="text-[#2C2C2C]/70 mb-12">
-            {/* Desktop layout */}
-            <div className="hidden md:flex flex-col items-center gap-2">
-              <div className="flex items-center justify-center gap-6">
-                <a
-                  href="https://www.instagram.com/parquedosprincipesresidence/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram"
-                  className="transition-opacity duration-200 hover:opacity-75"
-                >
-                  <img src={instagramIcon} alt="Instagram" width={32} height={32} />
-                </a>
-                <div className="flex items-center gap-2">
-                  <Mail size={20} className="text-[#C9A84C]" />
-                  <a
-                    href="mailto:parquedosprincipesresidence@gmail.com"
-                    style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
-                    className="hover:text-[#C9A84C] transition-colors duration-200"
-                  >
-                    parquedosprincipesresidence@gmail.com
-                  </a>
-                </div>
-                <a
-                  href="https://www.facebook.com/parquedosprincipesresidence"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Facebook"
-                  className="transition-opacity duration-200 hover:opacity-75"
-                >
-                  <img src={facebookIcon} alt="Facebook" width={32} height={32} />
-                </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone size={20} className="text-[#C9A84C]" />
-                <a
-                  href="tel:+351936559809"
-                  style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
-                  className="hover:text-[#C9A84C] transition-colors duration-200"
-                >
-                  +351 936 559 809
-                </a>
-                <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}>·</span>
-                <a
-                  href="tel:+351946518553"
-                  style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
-                  className="hover:text-[#C9A84C] transition-colors duration-200"
-                >
-                  +351 946 518 553
-                </a>
-              </div>
+          {/* Contact Info */}
+          <div className="text-[#2C2C2C]/70 mb-12 flex flex-col items-center gap-3">
+            <a
+              href="mailto:parquedosprincipesresidence@gmail.com"
+              style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px' }}
+              className="hover:text-[#C9A84C] transition-colors duration-200"
+            >
+              parquedosprincipesresidence@gmail.com
+            </a>
+            <div className="flex items-center gap-3" style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px' }}>
+              <a href="tel:+244936559809" className="hover:text-[#C9A84C] transition-colors duration-200">
+                +244 936 559 809
+              </a>
+              <span>·</span>
+              <a href="tel:+244946518553" className="hover:text-[#C9A84C] transition-colors duration-200">
+                +244 946 518 553
+              </a>
             </div>
-
-            {/* Mobile layout */}
-            <div className="flex flex-col items-center gap-4 md:hidden">
-              <div className="flex items-center gap-2">
-                <Mail size={20} className="text-[#C9A84C]" />
-                <a
-                  href="mailto:parquedosprincipesresidence@gmail.com"
-                  style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
-                  className="hover:text-[#C9A84C] transition-colors duration-200"
-                >
-                  parquedosprincipesresidence@gmail.com
-                </a>
-              </div>
-              <div className="flex flex-col items-center gap-2">
-                <div className="flex items-center gap-2">
-                  <Phone size={20} className="text-[#C9A84C]" />
-                  <a
-                    href="tel:+351936559809"
-                    style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
-                    className="hover:text-[#C9A84C] transition-colors duration-200"
-                  >
-                    +351 936 559 809
-                  </a>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Phone size={20} className="text-[#C9A84C]" />
-                  <a
-                    href="tel:+351946518553"
-                    style={{ fontFamily: 'Lato, sans-serif', fontSize: '15px' }}
-                    className="hover:text-[#C9A84C] transition-colors duration-200"
-                  >
-                    +351 946 518 553
-                  </a>
-                </div>
-              </div>
-              <div className="flex items-center gap-6">
-                <a
-                  href="https://www.instagram.com/parquedosprincipesresidence/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram"
-                  className="transition-opacity duration-200 hover:opacity-75"
-                >
-                  <img src={instagramIcon} alt="Instagram" width={32} height={32} />
-                </a>
-                <a
-                  href="https://www.facebook.com/parquedosprincipesresidence"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Facebook"
-                  className="transition-opacity duration-200 hover:opacity-75"
-                >
-                  <img src={facebookIcon} alt="Facebook" width={32} height={32} />
-                </a>
-              </div>
+            <div className="flex items-center gap-5 mt-1">
+              <a
+                href="https://www.instagram.com/parquedosprincipesresidence/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="transition-opacity duration-200 hover:opacity-75"
+              >
+                <img src={instagramIcon} alt="Instagram" width={22} height={22} />
+              </a>
+              <a
+                href="https://www.facebook.com/parquedosprincipesresidence"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="transition-opacity duration-200 hover:opacity-75"
+              >
+                <img src={facebookIcon} alt="Facebook" width={22} height={22} />
+              </a>
             </div>
           </div>
         </motion.div>

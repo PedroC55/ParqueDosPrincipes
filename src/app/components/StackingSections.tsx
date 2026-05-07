@@ -66,10 +66,12 @@ const css = `
 
   @media (max-width: 768px) {
     .stacking-wrapper {
-      height: 600dvh;
+      height: auto;
     }
     .stacking-section {
-      height: 100dvh;
+      top: 80px;
+      min-height: calc(60dvh - 80px);
+      height: auto;
       flex-direction: column;
     }
     .section-1,
@@ -80,14 +82,15 @@ const css = `
     }
     .stacking-section .image-side {
       width: 100%;
-      height: 42dvh;
+      height: 52vw;
       flex-shrink: 0;
     }
     .stacking-section .text-side {
       width: 100%;
-      padding: 28px 20px;
+      padding: 20px 20px 28px;
       flex: 1;
-      overflow-y: auto;
+      justify-content: center;
+      overflow: hidden;
     }
   }
 `;
@@ -116,7 +119,7 @@ const translations = {
     },
     section5: {
       label: 'CAMAMA - TALATONA',
-      headline: 'Viver em\nHarmonia Verde',
+      headline: 'Viver em\nHarmonia',
       body: 'Jardins exuberantes e áreas de lazer ao ar livre criam um refúgio natural onde a natureza e o conforto urbano coexistem em perfeita harmonia.',
     },
     section6: {
@@ -148,7 +151,7 @@ const translations = {
     },
     section5: {
       label: 'CAMAMA - TALATONA',
-      headline: 'Living in\nGreen Harmony',
+      headline: 'Living in\nHarmony',
       body: 'Lush gardens and outdoor leisure areas create a natural refuge where nature and urban comfort coexist in perfect harmony.',
     },
     section6: {
@@ -173,10 +176,10 @@ function TextBlock({ headline, body, dark = false }: TextBlockProps) {
         style={{
           color: '#C9A84C',
           fontFamily: 'Lato, sans-serif',
-          fontSize: '18px',
+          fontSize: 'clamp(10px, 2.8vw, 14px)',
           fontWeight: 400,
           letterSpacing: '0.25em',
-          marginBottom: '20px',
+          marginBottom: 'clamp(10px, 2vw, 20px)',
           textTransform: 'uppercase',
         }}
       >
@@ -186,16 +189,16 @@ function TextBlock({ headline, body, dark = false }: TextBlockProps) {
         style={{
           color: dark ? '#FFFFFF' : '#2C2C2C',
           fontFamily: 'Playfair Display, serif',
-          fontSize: 'clamp(2rem, 3.2vw, 3rem)',
+          fontSize: 'clamp(1.5rem, 3.2vw, 3rem)',
           fontWeight: 600,
           lineHeight: 1.15,
-          marginBottom: '20px',
+          marginBottom: 'clamp(10px, 2vw, 20px)',
           whiteSpace: 'pre-line',
         }}
       >
         {headline}
       </h2>
-      <div style={{ color: dark ? 'rgba(255,255,255,0.7)' : 'rgba(44,44,44,0.75)', fontFamily: 'Lato, sans-serif', fontSize: '16px', lineHeight: 1.85 }}>
+      <div style={{ color: dark ? 'rgba(255,255,255,0.7)' : 'rgba(44,44,44,0.75)', fontFamily: 'Lato, sans-serif', fontSize: 'clamp(12px, 3.2vw, 16px)', lineHeight: 1.65 }}>
         {body.split('\n\n').map((para, i) => (
           <p key={i} style={{ marginBottom: '12px' }}>{para}</p>
         ))}
@@ -224,6 +227,37 @@ export function StackingSections() {
     sections.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
   }, []);
+
+  // Mobile: o wrapper precisa de height suficiente para que cada secção (sticky)
+  // se mantenha visível até a seguinte a cobrir completamente.
+  // total + maxSection garante que mesmo a última transição funciona.
+  useEffect(() => {
+    const wrapper = document.querySelector<HTMLElement>('.stacking-wrapper');
+    const sectionEls = Array.from(document.querySelectorAll<HTMLElement>('.stacking-section'));
+    if (!wrapper || !sectionEls.length) return;
+
+    const HEADER = 80;
+    const update = () => {
+      if (window.innerWidth >= 1024) {
+        wrapper.style.height = '';
+        sectionEls.forEach(s => { s.style.minHeight = ''; });
+        return;
+      }
+      // Reset before measuring natural heights
+      sectionEls.forEach(s => { s.style.minHeight = ''; });
+      const heights = sectionEls.map(s => s.scrollHeight);
+      const max = Math.max(...heights);
+      // All sections get the same height — prevents bleed-through from taller sections
+      sectionEls.forEach(s => { s.style.minHeight = `${max}px`; });
+      const total = sectionEls.length * max;
+      const readingBuffer = Math.round(window.innerHeight * 0.3);
+      wrapper.style.height = `${total + readingBuffer + HEADER}px`;
+    };
+
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, [lang]);
 
   return (
     <>

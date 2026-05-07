@@ -38,7 +38,7 @@ export function Footer() {
           <div className="flex flex-col items-center mb-10">
             <span
               className="text-[#C9A84C] mb-8 tracking-[0.25em] uppercase"
-              style={{ fontFamily: 'Lato, sans-serif', fontSize: '11px', fontWeight: 700 }}
+              style={{ fontFamily: 'Lato, sans-serif', fontSize: '11px', fontWeight: 400 }}
             >
               Promotor
             </span>
@@ -51,7 +51,7 @@ export function Footer() {
               className="text-[#F5F0E8]/50 text-center mb-8"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px', lineHeight: '1.6' }}
             >
-              {t.disclaimer}{' '}<strong>{t.disclaimerNote}</strong>
+              {t.disclaimer}{' '}{t.disclaimerNote}
             </p>
 
             {/* Divider + Bottom Bar */}

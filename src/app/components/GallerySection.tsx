@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight, X, Plus } from 'lucide-react';
-import { motion, AnimatePresence, useMotionValue, animate } from 'motion/react';
+import { motion, AnimatePresence, useMotionValue, animate, useMotionValueEvent } from 'motion/react';
 import { useInView } from './hooks/useInView';
 import { useLanguage } from '../context/LanguageContext';
 import parqueLogo from '../../Assets/Logos/logo_parque_dos_principes_dourado.png';
@@ -14,8 +14,7 @@ const translations = {
     welcomeEnd: ', surge uma nova forma de viver - Parque dos Príncipes Residence.',
     address1: 'Luanda - Camama',
     address2: 'Rua das artes, lote 10',
-    // mesma ordem que galleryImages em App.tsx
-    imageLabels: ['EXTERIOR', 'JARDIM', 'JARDIM', 'PISCINA', 'GINÁSIO', 'BAR', 'SALÃO DE JOGOS', 'INTERIOR', 'GARAGEM'],
+    imageLabels: ['EXTERIOR', 'JARDIM', 'JARDIM', 'PISCINA', 'SALÃO DE JOGOS', 'INTERIOR', 'GARAGEM'],
   },
   EN: {
     label: 'GALLERY',
@@ -25,7 +24,7 @@ const translations = {
     welcomeEnd: ', a new way of living emerges - Parque dos Príncipes Residence.',
     address1: 'Luanda - Camama',
     address2: 'Rua das artes, lote 10',
-    imageLabels: ['EXTERIOR', 'GARDEN', 'GARDEN', 'POOL', 'GYM', 'BAR', 'GAMES ROOM', 'INTERIOR', 'GARAGE'],
+    imageLabels: ['EXTERIOR', 'GARDEN', 'GARDEN', 'POOL', 'GAMES ROOM', 'INTERIOR', 'GARAGE'],
   },
 };
 
@@ -33,13 +32,14 @@ interface GallerySectionProps {
   images: string[];
 }
 
-const GAP = 16; // px — gap entre cards no desktop
+const GAP = 16;
+const MOBILE_CLONE = 3; // clones at each end for seamless looping
 
 export function GallerySection({ images }: GallerySectionProps) {
   const [ref, isInView] = useInView({ threshold: 0.2 });
   const [startIndex, setStartIndex] = useState(0);
   const [cardWidth, setCardWidth] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(4);
+  const [visibleCount, setVisibleCount] = useState(3);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const { lang } = useLanguage();
   const t = translations[lang];
@@ -47,33 +47,64 @@ export function GallerySection({ images }: GallerySectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const animating = useRef(false);
   const x = useMotionValue(0);
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const dragStartX = useRef(0);
+  const isHorizontalDrag = useRef<boolean | null>(null);
 
-  // Calcula largura do card e visíveis consoante o viewport
+  // Mobile: flat array [last CLONE images][all images][first CLONE images]
+  const mobileFlatIndices = [
+    ...Array.from({ length: MOBILE_CLONE }, (_, i) => (images.length - MOBILE_CLONE + i + images.length) % images.length),
+    ...images.map((_, i) => i),
+    ...Array.from({ length: MOBILE_CLONE }, (_, i) => i % images.length),
+  ];
+
   useEffect(() => {
     const calc = () => {
       if (!containerRef.current) return;
       const isMobile = window.innerWidth < 1024;
-      const vc = isMobile ? 1 : 4;
-      const gap = isMobile ? 0 : GAP;
-      const cw = (containerRef.current.offsetWidth - (vc - 1) * gap) / vc;
+      const vc = isMobile ? 1 : 3;
+      const gap = isMobile ? 12 : GAP;
+      const cw = isMobile
+        ? containerRef.current.offsetWidth * 0.88
+        : (containerRef.current.offsetWidth - (vc - 1) * gap) / vc;
       setVisibleCount(vc);
       setCardWidth(cw);
-      x.set(-(cw + gap)); // esconde o card "prev" à esquerda
+      // Mobile: start showing first real image (skip MOBILE_CLONE clones on the right)
+      // Desktop: start with 1 prev card hidden
+      x.set(isMobile ? -MOBILE_CLONE * (cw + gap) : -(cw + gap));
     };
     calc();
     window.addEventListener('resize', calc);
     return () => window.removeEventListener('resize', calc);
   }, [x]);
 
-  const effectiveGap = visibleCount === 1 ? 0 : GAP;
+  const effectiveGap = visibleCount === 1 ? 12 : GAP;
 
+  // Mobile infinite loop: when x drifts out of the clone bounds, jump seamlessly
+  useMotionValueEvent(x, 'change', (latest) => {
+    if (visibleCount !== 1 || cardWidth === 0) return;
+    const step = cardWidth + effectiveGap;
+    const loopLen = images.length * step;
+    if (latest > -step) {
+      // Drifted into the right clones — jump back into real territory
+      x.set(latest - loopLen);
+      dragStartX.current -= loopLen;
+    } else if (latest < -(MOBILE_CLONE + images.length) * step) {
+      // Drifted into the left clones — jump forward into real territory
+      x.set(latest + loopLen);
+      dragStartX.current += loopLen;
+    }
+  });
+
+  // Desktop carousel handlers (arrow buttons)
   const handleNext = async () => {
     if (animating.current || cardWidth === 0) return;
     animating.current = true;
     const step = cardWidth + effectiveGap;
-    const initX = -step;
-    await animate(x, initX - step, { duration: 0.45, ease: [0.4, 0, 0.2, 1] });
-    x.set(initX);
+    const restX = -step;
+    await animate(x, restX - step, { duration: 0.45, ease: [0.4, 0, 0.2, 1] });
+    x.set(restX);
     setStartIndex((prev) => (prev + 1) % images.length);
     animating.current = false;
   };
@@ -82,28 +113,28 @@ export function GallerySection({ images }: GallerySectionProps) {
     if (animating.current || cardWidth === 0) return;
     animating.current = true;
     const step = cardWidth + effectiveGap;
-    const initX = -step;
-    await animate(x, 0, { duration: 0.45, ease: [0.4, 0, 0.2, 1] });
-    x.set(initX);
+    const restX = -step;
+    await animate(x, restX + step, { duration: 0.45, ease: [0.4, 0, 0.2, 1] });
+    x.set(restX);
     setStartIndex((prev) => (prev - 1 + images.length) % images.length);
     animating.current = false;
   };
 
-  // 1 escondido à esquerda + visíveis + 1 escondido à direita
-  const totalCards = visibleCount + 2;
-  const cardsToRender = Array.from({ length: totalCards }, (_, i) =>
-    (startIndex - 1 + i + images.length) % images.length
+  // Desktop: circular buffer (prev + visible + next)
+  const desktopCards = Array.from({ length: visibleCount + 2 }, (_, i) =>
+    (startIndex - 1 + i + images.length * 10) % images.length
   );
 
-  // Lightbox
+  const cardsToRender = visibleCount === 1 ? mobileFlatIndices : desktopCards;
+
   const openLightbox = (index: number) => setLightboxIndex(index);
   const closeLightbox = useCallback(() => setLightboxIndex(null), []);
-  const lightboxPrev = useCallback(() =>
-    setLightboxIndex((p) => (p === null ? null : (p - 1 + images.length) % images.length)),
+  const lightboxPrev = useCallback(
+    () => setLightboxIndex((p) => (p === null ? null : (p - 1 + images.length) % images.length)),
     [images.length]
   );
-  const lightboxNext = useCallback(() =>
-    setLightboxIndex((p) => (p === null ? null : (p + 1) % images.length)),
+  const lightboxNext = useCallback(
+    () => setLightboxIndex((p) => (p === null ? null : (p + 1) % images.length)),
     [images.length]
   );
 
@@ -145,20 +176,41 @@ export function GallerySection({ images }: GallerySectionProps) {
           </motion.div>
 
           {/* Info panel + Carousel */}
-          <div className="grid lg:grid-cols-5 gap-4 lg:gap-6">
+          <div className="lg:grid lg:grid-cols-[1fr_3fr] lg:gap-4 lg:items-stretch">
 
-            {/* Info Panel */}
+            {/* Info Panel — desktop only */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="bg-[#2D6B79] p-8 flex flex-col justify-between h-[300px] lg:h-[400px]"
+              className="hidden lg:flex flex-col justify-between bg-[#2D6B79] p-8"
             >
+              {/* Arrows — top right */}
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={handlePrev}
+                  aria-label="Anterior"
+                  className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/35 text-white flex items-center justify-center transition-all duration-200"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  onClick={handleNext}
+                  aria-label="Próximo"
+                  className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/35 text-white flex items-center justify-center transition-all duration-200"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+
+              {/* Logo */}
               <img
                 src={parqueLogo}
                 alt="Parque dos Príncipes"
-                className="h-14 w-auto object-contain self-start mt-4"
+                className="h-14 w-auto object-contain self-start"
               />
+
+              {/* Text */}
               <div>
                 <p
                   className="text-white/90 mb-4"
@@ -181,44 +233,66 @@ export function GallerySection({ images }: GallerySectionProps) {
               animate={isInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
               ref={containerRef}
-              className="lg:col-span-4 relative h-[300px] lg:h-[400px] overflow-hidden"
+              className="relative overflow-hidden"
+              onTouchStart={(e) => {
+                touchStartX.current = e.touches[0].clientX;
+                touchStartY.current = e.touches[0].clientY;
+                dragStartX.current = x.get();
+                isHorizontalDrag.current = null;
+              }}
+              onTouchMove={(e) => {
+                if (touchStartX.current === null || touchStartY.current === null) return;
+                const dx = e.touches[0].clientX - touchStartX.current;
+                const dy = e.touches[0].clientY - touchStartY.current;
+                if (isHorizontalDrag.current === null && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
+                  isHorizontalDrag.current = Math.abs(dx) > Math.abs(dy);
+                }
+                if (isHorizontalDrag.current) x.set(dragStartX.current + dx);
+              }}
+              onTouchEnd={() => {
+                touchStartX.current = null;
+                touchStartY.current = null;
+                isHorizontalDrag.current = null;
+              }}
             >
               {cardWidth > 0 && (
-                <motion.div
-                  style={{ x }}
-                  className="flex h-full"
-                >
+                <motion.div style={{ x }} className="flex">
                   {cardsToRender.map((imgIndex, i) => (
                     <div
-                      key={i}
-                      className="flex-shrink-0 relative h-full overflow-hidden cursor-pointer group"
+                      key={`${visibleCount}-${i}`}
+                      className="flex-shrink-0"
                       style={{
                         width: cardWidth,
-                        marginRight: i < totalCards - 1 ? effectiveGap : 0,
+                        marginRight: effectiveGap,
                       }}
-                      onClick={() => openLightbox(imgIndex)}
                     >
-                      <img
-                        src={images[imgIndex]}
-                        alt={`Galeria ${imgIndex + 1}`}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      {/* Hover overlay */}
-                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-end pb-8 gap-4">
-                        <span
-                          className="text-[#C9A84C] tracking-[0.15em]"
-                          style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', fontWeight: 700 }}
-                        >
-                          {t.imageLabels[imgIndex]}
-                        </span>
+                      {/* Image */}
+                      <div
+                        className="relative overflow-hidden cursor-pointer group h-64 lg:h-[400px]"
+                        onClick={() => openLightbox(imgIndex)}
+                      >
+                        <img
+                          src={images[imgIndex]}
+                          alt={`Galeria ${imgIndex + 1}`}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                          decoding="async"
+                        />
                         <button
                           aria-label="Ver imagem"
-                          className="w-10 h-10 rounded-full border-2 border-white/60 text-white flex items-center justify-center hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all duration-300 bg-black/20"
+                          className="absolute bottom-4 left-4 w-9 h-9 rounded-full border border-white/60 text-white flex items-center justify-center bg-black/20 hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all duration-300"
+                          onClick={(e) => { e.stopPropagation(); openLightbox(imgIndex); }}
                         >
-                          <Plus size={18} />
+                          <Plus size={16} />
                         </button>
+                      </div>
+
+                      {/* Label below image */}
+                      <div
+                        className="pt-3 text-[#C9A84C] tracking-[0.15em] uppercase"
+                        style={{ fontFamily: 'Lato, sans-serif', fontSize: '11px' }}
+                      >
+                        {t.imageLabels[imgIndex]}
                       </div>
                     </div>
                   ))}
@@ -226,27 +300,6 @@ export function GallerySection({ images }: GallerySectionProps) {
               )}
             </motion.div>
           </div>
-
-          {/* Navigation Arrows */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="flex justify-center gap-4 mt-8"
-          >
-            <button
-              onClick={handlePrev}
-              className="w-12 h-12 border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#1C1C1C] transition-all duration-300 flex items-center justify-center"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button
-              onClick={handleNext}
-              className="w-12 h-12 border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#1C1C1C] transition-all duration-300 flex items-center justify-center"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </motion.div>
 
         </div>
       </section>

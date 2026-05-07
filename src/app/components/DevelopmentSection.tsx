@@ -1,4 +1,4 @@
-import React from 'react';
+import type { RefObject } from 'react';
 import { motion } from 'motion/react';
 import { useInView } from './hooks/useInView';
 import { Check } from 'lucide-react';
@@ -16,12 +16,7 @@ const translations = {
   },
 };
 
-interface DevelopmentSectionProps {
-  image1: string;
-  image2: string;
-}
-
-export function DevelopmentSection({ image1, image2 }: DevelopmentSectionProps) {
+export function DevelopmentSection() {
   const [ref, isInView] = useInView({ threshold: 0.2 });
   const { lang } = useLanguage();
   const t = translations[lang];
@@ -31,35 +26,12 @@ export function DevelopmentSection({ image1, image2 }: DevelopmentSectionProps) 
     <section id="development" className="w-full bg-white">
       <StackingSections />
 
-      {/* Two Image Strip */}
+      {/* Amenities Section */}
       <motion.div
-        ref={ref as React.RefObject<HTMLDivElement>}
+        ref={ref as RefObject<HTMLDivElement>}
         initial={{ opacity: 0, y: 30 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="grid md:grid-cols-2 gap-[20px]"
-      >
-        <img
-          src={image1}
-          alt="Interior detail"
-          className="w-full h-[300px] md:h-[400px] object-cover"
-          loading="lazy"
-          decoding="async"
-        />
-        <img
-          src={image2}
-          alt="Interior detail"
-          className="w-full h-[300px] md:h-[400px] object-cover"
-          loading="lazy"
-          decoding="async"
-        />
-      </motion.div>
-
-      {/* Amenities Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
         className="px-6 lg:px-16 py-16 lg:py-24 bg-[#F5F0E8]"
       >
         <div className="max-w-[1200px] mx-auto">

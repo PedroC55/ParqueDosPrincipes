@@ -2,8 +2,6 @@ import { useEffect } from 'react';
 import { LanguageProvider } from './context/LanguageContext';
 import imgPiscina from '../Assets/Images/POOL_V2_FINAL.webp';
 import imgEspreguicadeiras from '../Assets/Images/JARDIM02_V2_FINAL.webp';
-import imgGinasio from '../Assets/Images/GYM_V2_FINAL.webp';
-import imgBar from '../Assets/Images/BAR_V2_FINAL.webp';
 import imgSalaoJogos from '../Assets/Images/SJOGOS_FINAL_V2.webp';
 import imgJardim from '../Assets/Images/JARDIM01_V2_FINAL.webp';
 import imgMasterplan from '../Assets/Images/TOP_V2_FINAL.webp';
@@ -32,14 +30,12 @@ export default function App() {
     };
   }, []);
 
-  // Todas as fotos da galeria (9 imagens, sem a TOP/masterplan)
+  // Todas as fotos da galeria (7 imagens, sem ginásio e bar)
   const galleryImages = [
     imgFachada,
     imgJardim,
     imgEspreguicadeiras,
     imgPiscina,
-    imgGinasio,
-    imgBar,
     imgSalaoJogos,
     imgHall,
     imgGaragem,
@@ -60,10 +56,7 @@ export default function App() {
 
       <VirtualTourSection />
 
-      <DevelopmentSection
-        image1={imgGinasio}
-        image2={imgBar}
-      />
+      <DevelopmentSection />
 
       <MasterplanSection planImage={imgMasterplan} />
 
