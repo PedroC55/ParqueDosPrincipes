@@ -5,7 +5,7 @@ import imgPiscina from '../../Assets/Images/POOL_V2_FINAL.webp';
 import imgGinasio from '../../Assets/Images/GYM_V2_FINAL.webp';
 import imgJardim from '../../Assets/Images/JARDIM01_V2_FINAL.webp';
 import imgGaragem from '../../Assets/Images/GARAGE_V2_FINAL.webp';
-import imgJacuzzi from '../../Assets/Images/JACUZZI_V1_FINAL.png';
+import imgJacuzzi from '../../Assets/Images/JACUZZI_V1_FINAL.webp';
 
 const css = `
   .stacking-wrapper {
