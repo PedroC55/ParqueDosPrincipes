@@ -14,7 +14,7 @@ const translations = {
     welcomeEnd: ', surge uma nova forma de viver - Parque dos Príncipes Residence.',
     address1: 'Luanda - Camama',
     address2: 'Rua das artes, lote 10',
-    imageLabels: ['EXTERIOR', 'JARDIM', 'JARDIM', 'PISCINA', 'SALÃO DE JOGOS', 'INTERIOR', 'GARAGEM'],
+    imageLabels: ['EXTERIOR', 'JARDIM', 'JARDIM', 'PISCINA', 'SALÃO DE JOGOS', 'INTERIOR', 'GARAGEM', 'JACUZZI', 'COZINHA', 'SALA', 'PARQUE', 'VARANDA', 'WC SUITE'],
   },
   EN: {
     label: 'GALLERY',
@@ -24,7 +24,7 @@ const translations = {
     welcomeEnd: ', a new way of living emerges - Parque dos Príncipes Residence.',
     address1: 'Luanda - Camama',
     address2: 'Rua das artes, lote 10',
-    imageLabels: ['EXTERIOR', 'GARDEN', 'GARDEN', 'POOL', 'GAMES ROOM', 'INTERIOR', 'GARAGE'],
+    imageLabels: ['EXTERIOR', 'GARDEN', 'GARDEN', 'POOL', 'GAMES ROOM', 'INTERIOR', 'GARAGE', 'JACUZZI', 'KITCHEN', 'LIVING ROOM', 'PARK', 'BALCONY', 'SUITE BATHROOM'],
   },
 };
 

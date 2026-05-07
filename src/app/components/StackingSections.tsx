@@ -5,7 +5,7 @@ import imgPiscina from '../../Assets/Images/POOL_V2_FINAL.webp';
 import imgGinasio from '../../Assets/Images/GYM_V2_FINAL.webp';
 import imgJardim from '../../Assets/Images/JARDIM01_V2_FINAL.webp';
 import imgGaragem from '../../Assets/Images/GARAGE_V2_FINAL.webp';
-import imgBar from '../../Assets/Images/BAR_V2_FINAL.webp';
+import imgJacuzzi from '../../Assets/Images/JACUZZI_V1_FINAL.png';
 
 const css = `
   .stacking-wrapper {
@@ -282,7 +282,7 @@ export function StackingSections() {
 
         {/* Panel 3 — Refúgio de luxo: Text LEFT / Image RIGHT */}
         <div className="stacking-section section-3">
-          <img src={imgBar} alt={t.section3.label} className="image-side" loading="lazy" decoding="async" />
+          <img src={imgJacuzzi} alt={t.section3.label} className="image-side" loading="lazy" decoding="async" />
           <div className="text-side">
             <TextBlock {...t.section3} />
           </div>

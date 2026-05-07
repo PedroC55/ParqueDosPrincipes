@@ -43,41 +43,63 @@ export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
         alt="Gestão do Condado"
         className="absolute inset-0 w-full h-full object-cover"
       />
-      {/* Dark overlay */}
-      <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.62)' }} />
+
+      {/* Mobile overlay: uniform dark */}
+      <div className="absolute inset-0 lg:hidden" style={{ backgroundColor: 'rgba(0,0,0,0.62)' }} />
+
+      {/* Desktop overlay: gradient left→right */}
+      <div
+        className="absolute inset-0 hidden lg:block"
+        style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.65) 45%, rgba(0,0,0,0.25) 100%)' }}
+      />
 
       {/* Content */}
-      <div className="relative z-10 py-20 lg:py-28 px-6 lg:px-20">
-        <div className="max-w-[680px] mx-auto lg:mx-0 lg:ml-[8%]">
+      <div className="relative z-10 py-20 lg:py-28 px-6 lg:px-0">
 
+        {/* Mobile: single column */}
+        <div className="lg:hidden max-w-[680px] mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Logo */}
             <div className="flex justify-center mb-8">
-              <img
-                src={gestaoLogo}
-                alt="Gestão do Condado"
-                className="h-36 lg:h-40 w-auto object-contain"
-              />
+              <img src={gestaoLogo} alt="Gestão do Condado" className="h-36 w-auto object-contain" />
             </div>
-
-            {/* Label */}
-            <div
-              className="mb-4 tracking-[0.25em] block"
-              style={{ fontFamily: 'Lato, sans-serif', fontSize: '11px', color: '#C9A84C' }}
-            >
+            <div className="mb-4 tracking-[0.25em]" style={{ fontFamily: 'Lato, sans-serif', fontSize: '11px', color: '#C9A84C' }}>
               {t.label}
             </div>
+            <h2 className="mb-8" style={{ fontFamily: 'Lato, sans-serif', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: 300, letterSpacing: '0.12em', color: '#FFFFFF' }}>
+              {t.title}
+            </h2>
+            <div className="space-y-4">
+              {t.paragraphs.map((p, i) => (
+                <p key={i} style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.85', color: 'rgba(255,255,255,0.82)' }}>
+                  {p}
+                </p>
+              ))}
+            </div>
+          </motion.div>
+        </div>
 
-            {/* Title */}
+        {/* Desktop: two-column layout */}
+        <div className="hidden lg:flex items-center w-full">
+
+          {/* Left: text content */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 }}
+            transition={{ duration: 0.8 }}
+            className="w-[55%] pl-[8%] pr-16"
+          >
+            <div className="mb-5 tracking-[0.25em]" style={{ fontFamily: 'Lato, sans-serif', fontSize: '11px', color: '#C9A84C' }}>
+              {t.label}
+            </div>
             <h2
               className="mb-8"
               style={{
                 fontFamily: 'Lato, sans-serif',
-                fontSize: 'clamp(1.4rem, 3vw, 2rem)',
+                fontSize: 'clamp(1.6rem, 2.8vw, 2.4rem)',
                 fontWeight: 300,
                 letterSpacing: '0.12em',
                 color: '#FFFFFF',
@@ -85,24 +107,29 @@ export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
             >
               {t.title}
             </h2>
-
-            {/* Paragraphs */}
             <div className="space-y-4">
               {t.paragraphs.map((p, i) => (
-                <p
-                  key={i}
-                  style={{
-                    fontFamily: 'Lato, sans-serif',
-                    fontSize: '13px',
-                    lineHeight: '1.85',
-                    color: 'rgba(255,255,255,0.82)',
-                  }}
-                >
+                <p key={i} style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', lineHeight: '1.85', color: 'rgba(255,255,255,0.82)' }}>
                   {p}
                 </p>
               ))}
             </div>
           </motion.div>
+
+          {/* Right: logo in bordered frame */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="w-[45%] flex items-center justify-center pr-[8%]"
+          >
+            <img
+              src={gestaoLogo}
+              alt="Gestão do Condado"
+              className="h-44 w-auto object-contain"
+            />
+          </motion.div>
+
         </div>
       </div>
     </section>

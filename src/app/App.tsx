@@ -7,6 +7,12 @@ import imgJardim from '../Assets/Images/JARDIM01_V2_FINAL.webp';
 import imgMasterplan from '../Assets/Images/TOP_V2_FINAL.webp';
 import imgHall from '../Assets/Images/HALL_V2_FINAL.webp';
 import imgFachada from '../Assets/Images/FACHADA_V1_FINAL.webp';
+import imgJacuzzi from '../Assets/Images/JACUZZI_V1_FINAL.png';
+import imgCozinha from '../Assets/Images/COZINHA_V1_FINAL.png';
+import imgSala from '../Assets/Images/SALA_V1_FINAL.png';
+import imgParque from '../Assets/Images/PARQUE_V1_FINAL.png';
+import imgVaranda from '../Assets/Images/VARANDA_V1_FINAL.png';
+import imgWcSuite from '../Assets/Images/WC_SUITE_V1_FINAL.png';
 import imgGaragem from '../Assets/Images/GARAGE_V2_FINAL.webp';
 import { Navigation } from './components/Navigation';
 import { HeroSection } from './components/HeroSection';
@@ -30,7 +36,6 @@ export default function App() {
     };
   }, []);
 
-  // Todas as fotos da galeria (7 imagens, sem ginásio e bar)
   const galleryImages = [
     imgFachada,
     imgJardim,
@@ -39,6 +44,12 @@ export default function App() {
     imgSalaoJogos,
     imgHall,
     imgGaragem,
+    imgJacuzzi,
+    imgCozinha,
+    imgSala,
+    imgParque,
+    imgVaranda,
+    imgWcSuite,
   ];
 
   return (

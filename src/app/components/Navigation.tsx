@@ -9,17 +9,19 @@ const navTranslations = {
 };
 
 export function Navigation() {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isPastHero, setIsPastHero] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { lang, setLang } = useLanguage();
   const t = navTranslations[lang];
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+    const check = () => {
+      const hero = document.getElementById('hero');
+      if (hero) setIsPastHero(hero.getBoundingClientRect().bottom <= 0);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    check();
+    window.addEventListener('scroll', check, { passive: true });
+    return () => window.removeEventListener('scroll', check);
   }, []);
 
   const scrollToSection = (id: string) => {
@@ -32,11 +34,11 @@ export function Navigation() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#1B2A3B]/95 backdrop-blur-md lg:bg-transparent ${
-        isScrolled || isMobileMenuOpen ? 'lg:bg-[#1B2A3B]/95 lg:backdrop-blur-md' : ''
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#1B2A3B]/95 backdrop-blur-md ${
+        !isPastHero && !isMobileMenuOpen ? 'lg:bg-transparent lg:backdrop-blur-none' : ''
       }`}
     >
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 py-4 lg:py-6">
+      <div className="max-w-[1440px] mx-auto px-6 lg:pl-1 lg:pr-12 py-4 lg:py-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
