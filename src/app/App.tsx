@@ -14,6 +14,8 @@ import imgParque from '../Assets/Images/PARQUE_V1_FINAL.webp';
 import imgVaranda from '../Assets/Images/VARANDA_V1_FINAL.webp';
 import imgWcSuite from '../Assets/Images/WC_SUITE_V1_FINAL.webp';
 import imgGaragem from '../Assets/Images/GARAGE_V2_FINAL.webp';
+import imgBar from '../Assets/Images/BAR_V2_FINAL.webp';
+import imgGym from '../Assets/Images/GYM_V2_FINAL.webp';
 import { Navigation } from './components/Navigation';
 import { HeroSection } from './components/HeroSection';
 import { IntroSection } from './components/IntroSection';
@@ -36,21 +38,9 @@ export default function App() {
     };
   }, []);
 
-  const galleryImages = [
-    imgFachada,
-    imgJardim,
-    imgEspreguicadeiras,
-    imgPiscina,
-    imgSalaoJogos,
-    imgHall,
-    imgGaragem,
-    imgJacuzzi,
-    imgCozinha,
-    imgSala,
-    imgParque,
-    imgVaranda,
-    imgWcSuite,
-  ];
+  const galleryExterior = [imgFachada, imgJardim, imgEspreguicadeiras, imgParque];
+  const galleryInterior = [imgHall, imgCozinha, imgSala, imgVaranda, imgWcSuite];
+  const galleryAmenities = [imgPiscina, imgBar, imgGym, imgSalaoJogos, imgJacuzzi, imgGaragem];
 
   return (
     <LanguageProvider>
@@ -61,7 +51,7 @@ export default function App() {
 
       <IntroSection aerialImage={imgJardim} />
 
-      <GallerySection images={galleryImages} />
+      <GallerySection exterior={galleryExterior} interior={galleryInterior} amenities={galleryAmenities} />
 
       <RevealSection />
 

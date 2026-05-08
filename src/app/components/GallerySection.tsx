@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight, X, Plus } from 'lucide-react';
-import { motion, AnimatePresence, useMotionValue, animate, useMotionValueEvent } from 'motion/react';
+import { motion, AnimatePresence, useMotionValue, useMotionValueEvent } from 'motion/react';
 import { useInView } from './hooks/useInView';
 import { useLanguage } from '../context/LanguageContext';
 import parqueLogo from '../../Assets/Logos/logo_parque_dos_principes_dourado.png';
@@ -9,145 +9,133 @@ const translations = {
   PT: {
     label: 'GALERIA',
     title: 'Explore o Projeto',
+    categories: ['Exterior', 'Interior', 'Amenities'],
+    photos: 'fotos',
     welcome: 'Seja bem-vindo a este lugar exclusivo, a poucos minutos de',
     highlight: 'Talatona',
     welcomeEnd: ', surge uma nova forma de viver - Parque dos Príncipes Residence.',
     address1: 'Luanda - Camama',
     address2: 'Rua das artes, lote 10',
-    imageLabels: ['EXTERIOR', 'JARDIM', 'JARDIM', 'PISCINA', 'SALÃO DE JOGOS', 'INTERIOR', 'GARAGEM', 'JACUZZI', 'COZINHA', 'SALA', 'PARQUE', 'VARANDA', 'WC SUITE'],
   },
   EN: {
     label: 'GALLERY',
     title: 'Explore the Project',
+    categories: ['Exterior', 'Interior', 'Amenities'],
+    photos: 'photos',
     welcome: 'Welcome to this exclusive place, a few minutes from',
     highlight: 'Talatona',
     welcomeEnd: ', a new way of living emerges - Parque dos Príncipes Residence.',
     address1: 'Luanda - Camama',
     address2: 'Rua das artes, lote 10',
-    imageLabels: ['EXTERIOR', 'GARDEN', 'GARDEN', 'POOL', 'GAMES ROOM', 'INTERIOR', 'GARAGE', 'JACUZZI', 'KITCHEN', 'LIVING ROOM', 'PARK', 'BALCONY', 'SUITE BATHROOM'],
   },
 };
 
 interface GallerySectionProps {
-  images: string[];
+  exterior: string[];
+  interior: string[];
+  amenities: string[];
 }
 
-const GAP = 16;
-const MOBILE_CLONE = 3; // clones at each end for seamless looping
+const MOBILE_GAP = 12;
+const CLONE = 3;
+const N_CARDS = 3; // exterior, interior, amenities
 
-export function GallerySection({ images }: GallerySectionProps) {
+// [last CLONE cards][all N_CARDS][first CLONE cards]
+const mobileFlatIndices = [
+  ...Array.from({ length: CLONE }, (_, i) => (N_CARDS - CLONE + i) % N_CARDS),
+  ...Array.from({ length: N_CARDS }, (_, i) => i),
+  ...Array.from({ length: CLONE }, (_, i) => i % N_CARDS),
+];
+
+export function GallerySection({ exterior, interior, amenities }: GallerySectionProps) {
   const [ref, isInView] = useInView({ threshold: 0.2 });
-  const [startIndex, setStartIndex] = useState(0);
-  const [cardWidth, setCardWidth] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(3);
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const { lang } = useLanguage();
   const t = translations[lang];
 
+  const allCategories = [exterior, interior, amenities];
+
+  // Lightbox
+  const [activeCategory, setActiveCategory] = useState<number | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const openGallery = (catIndex: number) => { setActiveCategory(catIndex); setLightboxIndex(0); };
+  const closeGallery = useCallback(() => setActiveCategory(null), []);
+
+  const prevImage = useCallback(() => {
+    setLightboxIndex(i => {
+      if (activeCategory === null) return i;
+      const len = allCategories[activeCategory].length;
+      return (i - 1 + len) % len;
+    });
+  }, [activeCategory, exterior, interior, amenities]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const nextImage = useCallback(() => {
+    setLightboxIndex(i => {
+      if (activeCategory === null) return i;
+      const len = allCategories[activeCategory].length;
+      return (i + 1) % len;
+    });
+  }, [activeCategory, exterior, interior, amenities]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (activeCategory === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeGallery();
+      if (e.key === 'ArrowLeft') prevImage();
+      if (e.key === 'ArrowRight') nextImage();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [activeCategory, closeGallery, prevImage, nextImage]);
+
+  // Mobile carousel
   const containerRef = useRef<HTMLDivElement>(null);
-  const animating = useRef(false);
+  const [cardWidth, setCardWidth] = useState(0);
   const x = useMotionValue(0);
+  const dragStartX = useRef(0);
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
-  const dragStartX = useRef(0);
   const isHorizontalDrag = useRef<boolean | null>(null);
-
-  // Mobile: flat array [last CLONE images][all images][first CLONE images]
-  const mobileFlatIndices = [
-    ...Array.from({ length: MOBILE_CLONE }, (_, i) => (images.length - MOBILE_CLONE + i + images.length) % images.length),
-    ...images.map((_, i) => i),
-    ...Array.from({ length: MOBILE_CLONE }, (_, i) => i % images.length),
-  ];
 
   useEffect(() => {
     const calc = () => {
-      if (!containerRef.current) return;
-      const isMobile = window.innerWidth < 1024;
-      const vc = isMobile ? 1 : 3;
-      const gap = isMobile ? 12 : GAP;
-      const cw = isMobile
-        ? containerRef.current.offsetWidth * 0.88
-        : (containerRef.current.offsetWidth - (vc - 1) * gap) / vc;
-      setVisibleCount(vc);
+      if (!containerRef.current || window.innerWidth >= 1024) return;
+      const cw = containerRef.current.offsetWidth;
+      if (cw <= 0) return;
       setCardWidth(cw);
-      // Mobile: start showing first real image (skip MOBILE_CLONE clones on the right)
-      // Desktop: start with 1 prev card hidden
-      x.set(isMobile ? -MOBILE_CLONE * (cw + gap) : -(cw + gap));
+      x.set(-CLONE * (cw + MOBILE_GAP));
     };
     calc();
     window.addEventListener('resize', calc);
     return () => window.removeEventListener('resize', calc);
   }, [x]);
 
-  const effectiveGap = visibleCount === 1 ? 12 : GAP;
-
-  // Mobile infinite loop: when x drifts out of the clone bounds, jump seamlessly
   useMotionValueEvent(x, 'change', (latest) => {
-    if (visibleCount !== 1 || cardWidth === 0) return;
-    const step = cardWidth + effectiveGap;
-    const loopLen = images.length * step;
+    if (cardWidth === 0) return;
+    const step = cardWidth + MOBILE_GAP;
+    const loopLen = N_CARDS * step;
     if (latest > -step) {
-      // Drifted into the right clones — jump back into real territory
       x.set(latest - loopLen);
       dragStartX.current -= loopLen;
-    } else if (latest < -(MOBILE_CLONE + images.length) * step) {
-      // Drifted into the left clones — jump forward into real territory
+    } else if (latest < -(CLONE + N_CARDS) * step) {
       x.set(latest + loopLen);
       dragStartX.current += loopLen;
     }
   });
 
-  // Desktop carousel handlers (arrow buttons)
-  const handleNext = async () => {
-    if (animating.current || cardWidth === 0) return;
-    animating.current = true;
-    const step = cardWidth + effectiveGap;
-    const restX = -step;
-    await animate(x, restX - step, { duration: 0.45, ease: [0.4, 0, 0.2, 1] });
-    x.set(restX);
-    setStartIndex((prev) => (prev + 1) % images.length);
-    animating.current = false;
+  const cardHeight = cardWidth > 0 ? Math.round(cardWidth * 1.1) : 0;
+
+  const currentImages = activeCategory !== null ? allCategories[activeCategory] : [];
+
+  // Lightbox swipe (separate from carousel)
+  const lbTouchStartX = useRef<number | null>(null);
+  const onLbTouchStart = (e: React.TouchEvent) => { lbTouchStartX.current = e.touches[0].clientX; };
+  const onLbTouchEnd = (e: React.TouchEvent) => {
+    if (lbTouchStartX.current === null) return;
+    const dx = e.changedTouches[0].clientX - lbTouchStartX.current;
+    if (Math.abs(dx) > 50) dx < 0 ? nextImage() : prevImage();
+    lbTouchStartX.current = null;
   };
-
-  const handlePrev = async () => {
-    if (animating.current || cardWidth === 0) return;
-    animating.current = true;
-    const step = cardWidth + effectiveGap;
-    const restX = -step;
-    await animate(x, restX + step, { duration: 0.45, ease: [0.4, 0, 0.2, 1] });
-    x.set(restX);
-    setStartIndex((prev) => (prev - 1 + images.length) % images.length);
-    animating.current = false;
-  };
-
-  // Desktop: circular buffer (prev + visible + next)
-  const desktopCards = Array.from({ length: visibleCount + 2 }, (_, i) =>
-    (startIndex - 1 + i + images.length * 10) % images.length
-  );
-
-  const cardsToRender = visibleCount === 1 ? mobileFlatIndices : desktopCards;
-
-  const openLightbox = (index: number) => setLightboxIndex(index);
-  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
-  const lightboxPrev = useCallback(
-    () => setLightboxIndex((p) => (p === null ? null : (p - 1 + images.length) % images.length)),
-    [images.length]
-  );
-  const lightboxNext = useCallback(
-    () => setLightboxIndex((p) => (p === null ? null : (p + 1) % images.length)),
-    [images.length]
-  );
-
-  useEffect(() => {
-    if (lightboxIndex === null) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') lightboxPrev();
-      if (e.key === 'ArrowRight') lightboxNext();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [lightboxIndex, closeLightbox, lightboxPrev, lightboxNext]);
 
   return (
     <>
@@ -161,77 +149,32 @@ export function GallerySection({ images }: GallerySectionProps) {
             transition={{ duration: 0.8 }}
             className="mb-12"
           >
-            <div
-              className="text-[#C9A84C] mb-4 tracking-[0.2em]"
-              style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}
-            >
+            <div className="text-[#C9A84C] mb-4 tracking-[0.2em]" style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px' }}>
               {t.label}
             </div>
-            <h2
-              className="text-[#F5F0E8]"
-              style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 600 }}
-            >
+            <h2 className="text-[#F5F0E8]" style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 600 }}>
               {t.title}
             </h2>
           </motion.div>
 
-          {/* Info panel + Carousel */}
-          <div className="lg:grid lg:grid-cols-[1fr_3fr] lg:gap-4 lg:items-stretch">
+          {/* ── Mobile only ── */}
+          <div className="lg:hidden">
 
-            {/* Info Panel — desktop only */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="hidden lg:flex flex-col justify-between bg-[#2D6B79] p-8"
-            >
-              {/* Arrows — top right */}
-              <div className="flex justify-end gap-3">
-                <button
-                  onClick={handlePrev}
-                  aria-label="Anterior"
-                  className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/35 text-white flex items-center justify-center transition-all duration-200"
-                >
-                  <ChevronLeft size={18} />
-                </button>
-                <button
-                  onClick={handleNext}
-                  aria-label="Próximo"
-                  className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/35 text-white flex items-center justify-center transition-all duration-200"
-                >
-                  <ChevronRight size={18} />
-                </button>
-              </div>
-
-              {/* Logo */}
-              <img
-                src={parqueLogo}
-                alt="Parque dos Príncipes"
-                className="h-14 w-auto object-contain self-start"
-              />
-
-              {/* Text */}
+            {/* Blue info card — static, full width */}
+            <div className="flex flex-col justify-between bg-[#2D6B79] p-6 mb-4" style={{ minHeight: '220px' }}>
+              <img src={parqueLogo} alt="Parque dos Príncipes" className="h-12 w-auto object-contain self-start mb-4" />
               <div>
-                <p
-                  className="text-white/90 mb-4"
-                  style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.7' }}
-                >
+                <p className="text-white/90 mb-3" style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.7' }}>
                   {t.welcome} <strong>{t.highlight}</strong>{t.welcomeEnd}
                 </p>
-                <p
-                  className="text-white/70"
-                  style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.6' }}
-                >
+                <p className="text-white/70" style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.6' }}>
                   {t.address1}<br />{t.address2}
                 </p>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Carousel */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
+            {/* Category cards carousel — swipeable, infinite loop */}
+            <div
               ref={containerRef}
               className="relative overflow-hidden"
               onTouchStart={(e) => {
@@ -247,7 +190,10 @@ export function GallerySection({ images }: GallerySectionProps) {
                 if (isHorizontalDrag.current === null && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
                   isHorizontalDrag.current = Math.abs(dx) > Math.abs(dy);
                 }
-                if (isHorizontalDrag.current) x.set(dragStartX.current + dx);
+                if (isHorizontalDrag.current) {
+                  e.preventDefault();
+                  x.set(dragStartX.current + dx);
+                }
               }}
               onTouchEnd={() => {
                 touchStartX.current = null;
@@ -257,48 +203,89 @@ export function GallerySection({ images }: GallerySectionProps) {
             >
               {cardWidth > 0 && (
                 <motion.div style={{ x }} className="flex">
-                  {cardsToRender.map((imgIndex, i) => (
+                  {mobileFlatIndices.map((cardIdx, i) => (
                     <div
-                      key={`${visibleCount}-${i}`}
+                      key={`m-${i}`}
                       className="flex-shrink-0"
-                      style={{
-                        width: cardWidth,
-                        marginRight: effectiveGap,
-                      }}
+                      style={{ width: cardWidth, marginRight: MOBILE_GAP, height: cardHeight }}
                     >
-                      {/* Image */}
                       <div
-                        className="relative overflow-hidden cursor-pointer group h-64 lg:h-[400px]"
-                        onClick={() => openLightbox(imgIndex)}
+                        className="relative w-full h-full overflow-hidden cursor-pointer group"
+                        onClick={() => openGallery(cardIdx)}
                       >
                         <img
-                          src={images[imgIndex]}
-                          alt={`Galeria ${imgIndex + 1}`}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          src={allCategories[cardIdx][0]}
+                          alt={t.categories[cardIdx]}
+                          className="w-full h-full object-cover"
                           loading="lazy"
                           decoding="async"
                         />
-                        <button
-                          aria-label="Ver imagem"
-                          className="absolute bottom-4 left-4 w-9 h-9 rounded-full border border-white/60 text-white flex items-center justify-center bg-black/20 hover:border-[#C9A84C] hover:text-[#C9A84C] transition-all duration-300"
-                          onClick={(e) => { e.stopPropagation(); openLightbox(imgIndex); }}
-                        >
-                          <Plus size={16} />
-                        </button>
-                      </div>
-
-                      {/* Label below image */}
-                      <div
-                        className="pt-3 text-[#C9A84C] tracking-[0.15em] uppercase"
-                        style={{ fontFamily: 'Lato, sans-serif', fontSize: '11px' }}
-                      >
-                        {t.imageLabels[imgIndex]}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
+                        <div className="absolute bottom-4 left-4 right-4">
+                          <h3 className="text-white" style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.1rem', fontWeight: 600 }}>
+                            {t.categories[cardIdx]}
+                          </h3>
+                        </div>
+                        <div className="absolute top-3 right-3 w-8 h-8 rounded-full border border-white/60 text-white flex items-center justify-center bg-black/20">
+                          <Plus size={14} />
+                        </div>
                       </div>
                     </div>
                   ))}
                 </motion.div>
               )}
+            </div>
+          </div>
+
+          {/* ── Desktop grid (4 columns) ── */}
+          <div className="hidden lg:grid lg:grid-cols-4 gap-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.7 }}
+              className="flex flex-col justify-between bg-[#2D6B79] p-8"
+              style={{ height: 'clamp(260px, 40vw, 480px)' }}
+            >
+              <img src={parqueLogo} alt="Parque dos Príncipes" className="h-14 w-auto object-contain self-start" />
+              <div>
+                <p className="text-white/90 mb-4" style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.7' }}>
+                  {t.welcome} <strong>{t.highlight}</strong>{t.welcomeEnd}
+                </p>
+                <p className="text-white/70" style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.6' }}>
+                  {t.address1}<br />{t.address2}
+                </p>
+              </div>
             </motion.div>
+
+            {allCategories.map((images, catIndex) => (
+              <motion.div
+                key={catIndex}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.7, delay: 0.15 * (catIndex + 1) }}
+                className="relative overflow-hidden cursor-pointer group"
+                style={{ height: 'clamp(260px, 40vw, 480px)' }}
+                onClick={() => openGallery(catIndex)}
+              >
+                <img
+                  src={images[0]}
+                  alt={t.categories[catIndex]}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6">
+                  <h3 className="text-white" style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.4rem, 2.5vw, 1.8rem)', fontWeight: 600 }}>
+                    {t.categories[catIndex]}
+                  </h3>
+                </div>
+                <div className="absolute top-4 right-4 w-9 h-9 rounded-full border border-white/60 text-white flex items-center justify-center bg-black/20 group-hover:border-[#C9A84C] group-hover:text-[#C9A84C] transition-all duration-300">
+                  <Plus size={16} />
+                </div>
+                <div className="absolute inset-0 ring-1 ring-inset ring-[#C9A84C]/0 group-hover:ring-[#C9A84C]/35 transition-all duration-300" />
+              </motion.div>
+            ))}
           </div>
 
         </div>
@@ -306,55 +293,63 @@ export function GallerySection({ images }: GallerySectionProps) {
 
       {/* Lightbox */}
       <AnimatePresence>
-        {lightboxIndex !== null && (
+        {activeCategory !== null && (
           <motion.div
             className="fixed inset-0 z-50 flex items-center justify-center"
-            style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}
+            style={{ backgroundColor: 'rgba(0,0,0,0.92)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            onClick={closeLightbox}
+            onClick={closeGallery}
+            onTouchStart={onLbTouchStart}
+            onTouchEnd={onLbTouchEnd}
           >
-            <button
-              onClick={closeLightbox}
-              className="absolute top-6 right-8 text-white/70 hover:text-white transition-colors z-10"
-            >
-              <X size={28} />
-            </button>
-            <button
-              onClick={(e) => { e.stopPropagation(); lightboxPrev(); }}
-              className="absolute left-6 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors z-10"
-            >
-              <ChevronLeft size={48} strokeWidth={1.5} />
-            </button>
             <motion.div
               key={lightboxIndex}
               initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.2 }}
-              className="mx-20"
+              className="relative flex flex-col items-center"
               onClick={(e) => e.stopPropagation()}
             >
+              {/* X + legend row */}
+              <div className="flex items-center justify-between w-full mb-3 px-1">
+                <div
+                  className="text-white/50"
+                  style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px', letterSpacing: '0.1em' }}
+                >
+                  {t.categories[activeCategory]} · {lightboxIndex + 1} / {currentImages.length}
+                </div>
+                <button onClick={closeGallery} className="text-white/70 hover:text-white transition-colors">
+                  <X size={24} />
+                </button>
+              </div>
+
+              {/* Image */}
               <img
-                src={images[lightboxIndex]}
-                alt={`Galeria ${lightboxIndex + 1}`}
+                src={currentImages[lightboxIndex]}
+                alt={`${t.categories[activeCategory]} ${lightboxIndex + 1}`}
                 className="object-contain rounded"
-                style={{ maxWidth: '80vw', maxHeight: '85vh' }}
+                style={{ maxWidth: '88vw', maxHeight: '78vh' }}
               />
+
+              {/* Chevrons below */}
+              <div className="flex gap-4 mt-4">
+                <button
+                  onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                  className="w-10 h-10 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center transition-all duration-200"
+                >
+                  <ChevronLeft size={22} />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                  className="w-10 h-10 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center transition-all duration-200"
+                >
+                  <ChevronRight size={22} />
+                </button>
+              </div>
             </motion.div>
-            <button
-              onClick={(e) => { e.stopPropagation(); lightboxNext(); }}
-              className="absolute right-6 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors z-10"
-            >
-              <ChevronRight size={48} strokeWidth={1.5} />
-            </button>
-            <div
-              className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50"
-              style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px', letterSpacing: '0.1em' }}
-            >
-              {lightboxIndex + 1} / {images.length}
-            </div>
           </motion.div>
         )}
       </AnimatePresence>

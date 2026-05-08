@@ -1,7 +1,13 @@
-import { motion } from 'motion/react';
+import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useInView } from './hooks/useInView';
 import { useLanguage } from '../context/LanguageContext';
 import parqueLogo from '../../Assets/Logos/logo_parque_dos_principes_dourado.png';
+import duplex01 from '../../Assets/Images/01_FINAL.png';
+import duplex02 from '../../Assets/Images/02_FINAL.png';
+
+const duplexImages = [duplex01, duplex02];
 
 const translations = {
   PT: {
@@ -9,7 +15,7 @@ const translations = {
     columns: [
       { label: 'Dois Quartos', type: 'T2' },
       { label: 'Três Quartos', type: 'T3' },
-      { label: 'Duplex', type: 'T2 · T3\nDuplex +1' },
+      { label: 'Duplex', type: '' },
     ],
     features: [
       'Acesso direto ao jardim',
@@ -23,7 +29,7 @@ const translations = {
     columns: [
       { label: 'Two Bedroom', type: 'T2' },
       { label: 'Three Bedroom', type: 'T3' },
-      { label: 'Duplex', type: 'T2 · T3\nDuplex +1' },
+      { label: 'Duplex', type: '' },
     ],
     features: [
       'Direct garden access',
@@ -42,8 +48,25 @@ export function MasterplanSection({ planImage }: MasterplanSectionProps) {
   const [ref, isInView] = useInView({ threshold: 0.2 });
   const { lang } = useLanguage();
   const t = translations[lang];
+  const [duplexLightbox, setDuplexLightbox] = useState<number | null>(null);
+
+  const closeDuplex = useCallback(() => setDuplexLightbox(null), []);
+  const prevDuplex = useCallback(() => setDuplexLightbox(i => i === null ? null : (i - 1 + duplexImages.length) % duplexImages.length), []);
+  const nextDuplex = useCallback(() => setDuplexLightbox(i => i === null ? null : (i + 1) % duplexImages.length), []);
+
+  useEffect(() => {
+    if (duplexLightbox === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeDuplex();
+      if (e.key === 'ArrowLeft') prevDuplex();
+      if (e.key === 'ArrowRight') nextDuplex();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [duplexLightbox, closeDuplex, prevDuplex, nextDuplex]);
 
   return (
+    <>
     <section id="masterplan" ref={ref} className="w-full bg-[#F5F0E8] py-16 lg:py-0 overflow-hidden">
       <div className="flex flex-col lg:flex-row lg:items-stretch">
 
@@ -106,16 +129,28 @@ export function MasterplanSection({ planImage }: MasterplanSectionProps) {
                   >
                     {col.label}
                   </p>
-                  <p
-                    className="text-[#2C2C2C] whitespace-pre-line leading-snug"
-                    style={{
-                      fontFamily: 'Playfair Display, serif',
-                      fontSize: 'clamp(1.1rem, 2vw, 1.5rem)',
-                      fontWeight: 500,
-                    }}
-                  >
-                    {col.type}
-                  </p>
+                  {i === 2 ? (
+                    <div
+                      className="text-[#2C2C2C] leading-snug"
+                      style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', fontWeight: 500 }}
+                    >
+                      <span className="block">T2 Duplex +1</span>
+                      <button
+                        onClick={() => setDuplexLightbox(0)}
+                        className="block text-[#C9A84C] underline underline-offset-2 hover:text-[#a8873a] transition-colors cursor-pointer"
+                        style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', fontWeight: 500 }}
+                      >
+                        T3 Duplex +1
+                      </button>
+                    </div>
+                  ) : (
+                    <p
+                      className="text-[#2C2C2C] whitespace-pre-line leading-snug"
+                      style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', fontWeight: 500 }}
+                    >
+                      {col.type}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
@@ -150,5 +185,70 @@ export function MasterplanSection({ planImage }: MasterplanSectionProps) {
 
       </div>
     </section>
+
+      {/* Duplex Lightbox */}
+      <AnimatePresence>
+        {duplexLightbox !== null && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center"
+            style={{ backgroundColor: 'rgba(0,0,0,0.88)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={closeDuplex}
+          >
+            {/* Image wrapper — chevrons and X are relative to this */}
+            <motion.div
+              key={duplexLightbox}
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.2 }}
+              className="relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* X */}
+              <button
+                onClick={closeDuplex}
+                className="absolute -top-10 right-0 text-white/70 hover:text-white transition-colors"
+              >
+                <X size={26} />
+              </button>
+
+              <img
+                src={duplexImages[duplexLightbox]}
+                alt={`T3 Duplex ${duplexLightbox + 1}`}
+                className="object-contain rounded"
+                style={{ maxWidth: '88vw', maxHeight: '85vh' }}
+              />
+
+              {/* Left chevron */}
+              <button
+                onClick={(e) => { e.stopPropagation(); prevDuplex(); }}
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-all duration-200"
+              >
+                <ChevronLeft size={22} />
+              </button>
+
+              {/* Right chevron */}
+              <button
+                onClick={(e) => { e.stopPropagation(); nextDuplex(); }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-all duration-200"
+              >
+                <ChevronRight size={22} />
+              </button>
+
+              {/* Counter */}
+              <div
+                className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-white/50"
+                style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px', letterSpacing: '0.1em' }}
+              >
+                {duplexLightbox + 1} / {duplexImages.length}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
