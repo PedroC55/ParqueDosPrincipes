@@ -12,11 +12,7 @@ const duplexImages = [duplex01, duplex02];
 const translations = {
   PT: {
     title: 'Masterplan',
-    columns: [
-      { label: 'Dois Quartos', type: 'T2' },
-      { label: 'Três Quartos', type: 'T3' },
-      { label: 'Duplex', type: '' },
-    ],
+    duplexLabel: 'Duplex',
     features: [
       'Acesso direto ao jardim',
       'Ampla iluminação natural',
@@ -26,11 +22,7 @@ const translations = {
   },
   EN: {
     title: 'Masterplan',
-    columns: [
-      { label: 'Two Bedroom', type: 'T2' },
-      { label: 'Three Bedroom', type: 'T3' },
-      { label: 'Duplex', type: '' },
-    ],
+    duplexLabel: 'Duplex',
     features: [
       'Direct garden access',
       'Ample natural lighting',
@@ -113,46 +105,34 @@ export function MasterplanSection({ planImage }: MasterplanSectionProps) {
             {/* Top divider */}
             <div className="w-full h-px bg-[#C9A84C]/30 mb-8" />
 
-            {/* Typology Columns */}
-            <div className="flex items-stretch justify-center w-full mb-8">
-              {t.columns.map((col, i) => (
-                <div
-                  key={col.label}
-                  className="flex-1 flex flex-col items-center text-center px-4"
-                  style={{
-                    borderLeft: i > 0 ? '1px solid rgba(201,168,76,0.3)' : 'none',
-                  }}
-                >
-                  <p
-                    className="text-[#C9A84C] uppercase tracking-widest mb-3"
-                    style={{ fontFamily: 'Lato, sans-serif', fontSize: '10px', fontWeight: 700, letterSpacing: '0.2em' }}
+            {/* Typology — Duplex */}
+            <div className="flex flex-col items-center w-full mb-8">
+              <p
+                className="text-[#C9A84C] uppercase tracking-widest mb-4"
+                style={{ fontFamily: 'Lato, sans-serif', fontSize: '10px', fontWeight: 700, letterSpacing: '0.2em' }}
+              >
+                {t.duplexLabel}
+              </p>
+              <div className="flex items-center justify-center w-full gap-0">
+                <div className="flex-1 flex justify-end pr-6">
+                  <span
+                    className="text-[#2C2C2C]"
+                    style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', fontWeight: 500 }}
                   >
-                    {col.label}
-                  </p>
-                  {i === 2 ? (
-                    <div
-                      className="text-[#2C2C2C] leading-snug"
-                      style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', fontWeight: 500 }}
-                    >
-                      <span className="block">T2 Duplex +1</span>
-                      <button
-                        onClick={() => setDuplexLightbox(0)}
-                        className="block text-[#C9A84C] underline underline-offset-2 hover:text-[#a8873a] transition-colors cursor-pointer"
-                        style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', fontWeight: 500 }}
-                      >
-                        T3 Duplex +1
-                      </button>
-                    </div>
-                  ) : (
-                    <p
-                      className="text-[#2C2C2C] whitespace-pre-line leading-snug"
-                      style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', fontWeight: 500 }}
-                    >
-                      {col.type}
-                    </p>
-                  )}
+                    T2 Duplex +1
+                  </span>
                 </div>
-              ))}
+                <div className="w-px self-stretch bg-[#C9A84C]/40" />
+                <div className="flex-1 flex justify-start pl-6">
+                  <button
+                    onClick={() => setDuplexLightbox(0)}
+                    className="text-[#C9A84C] underline underline-offset-2 hover:text-[#a8873a] transition-colors cursor-pointer"
+                    style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', fontWeight: 500 }}
+                  >
+                    T3 Duplex +1
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* Bottom divider */}
@@ -198,52 +178,49 @@ export function MasterplanSection({ planImage }: MasterplanSectionProps) {
             transition={{ duration: 0.25 }}
             onClick={closeDuplex}
           >
-            {/* Image wrapper — chevrons and X are relative to this */}
             <motion.div
               key={duplexLightbox}
               initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.2 }}
-              className="relative"
+              className="relative flex flex-col items-center"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* X */}
-              <button
-                onClick={closeDuplex}
-                className="absolute -top-10 right-0 text-white/70 hover:text-white transition-colors"
-              >
-                <X size={26} />
-              </button>
+              {/* Counter + X — top row */}
+              <div className="flex items-center justify-between w-full mb-3 px-1">
+                <div
+                  className="text-white/50"
+                  style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px', letterSpacing: '0.1em' }}
+                >
+                  Duplex · {duplexLightbox + 1} / {duplexImages.length}
+                </div>
+                <button onClick={closeDuplex} className="text-white/70 hover:text-white transition-colors">
+                  <X size={24} />
+                </button>
+              </div>
 
+              {/* Image */}
               <img
                 src={duplexImages[duplexLightbox]}
                 alt={`T3 Duplex ${duplexLightbox + 1}`}
                 className="object-contain rounded"
-                style={{ maxWidth: '88vw', maxHeight: '85vh' }}
+                style={{ maxWidth: '88vw', maxHeight: '78vh' }}
               />
 
-              {/* Left chevron */}
-              <button
-                onClick={(e) => { e.stopPropagation(); prevDuplex(); }}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-all duration-200"
-              >
-                <ChevronLeft size={22} />
-              </button>
-
-              {/* Right chevron */}
-              <button
-                onClick={(e) => { e.stopPropagation(); nextDuplex(); }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-all duration-200"
-              >
-                <ChevronRight size={22} />
-              </button>
-
-              {/* Counter */}
-              <div
-                className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-white/50"
-                style={{ fontFamily: 'Lato, sans-serif', fontSize: '12px', letterSpacing: '0.1em' }}
-              >
-                {duplexLightbox + 1} / {duplexImages.length}
+              {/* Chevrons below */}
+              <div className="flex gap-4 mt-4">
+                <button
+                  onClick={(e) => { e.stopPropagation(); prevDuplex(); }}
+                  className="w-10 h-10 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center transition-all duration-200"
+                >
+                  <ChevronLeft size={22} />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); nextDuplex(); }}
+                  className="w-10 h-10 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center transition-all duration-200"
+                >
+                  <ChevronRight size={22} />
+                </button>
               </div>
             </motion.div>
           </motion.div>
