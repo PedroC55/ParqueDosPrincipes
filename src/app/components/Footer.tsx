@@ -26,8 +26,15 @@ export function Footer() {
     <footer className="w-full">
       {/* Upper Band - Project Logo */}
       <div className="bg-[#2D6B79] py-12">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-12 flex justify-center">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-12 flex flex-col items-center gap-6">
           <img src={parqueLogo} alt="Parque dos Príncipes" className="h-20 w-auto object-contain" />
+          <div className="flex items-center gap-3 w-48">
+            <div className="flex-1 h-px bg-[#9A8B68]/50" />
+            <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '9px', fontWeight: 400, letterSpacing: '0.22em', color: '#9A8B68', whiteSpace: 'nowrap' }}>
+              EMPREENDIMENTO
+            </span>
+            <div className="flex-1 h-px bg-[#9A8B68]/50" />
+          </div>
         </div>
       </div>
 
@@ -35,14 +42,15 @@ export function Footer() {
       <div className="bg-[#1B2A3B] py-12">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
           {/* Promotor — Gestão do Condado, centrado e isolado */}
-          <div className="flex flex-col items-center mb-10">
-            <span
-              className="text-[#C9A84C] mb-8 tracking-[0.25em] uppercase"
-              style={{ fontFamily: 'Lato, sans-serif', fontSize: '11px', fontWeight: 400 }}
-            >
-              Promotor
-            </span>
+          <div className="flex flex-col items-center gap-6 mb-10">
             <img src={gestaoLogo} alt="Gestão do Condado" className="h-24 w-auto object-contain" style={{ transform: 'translateX(12px)' }} />
+            <div className="flex items-center gap-3 w-36">
+              <div className="flex-1 h-px bg-[#9A8B68]/50" />
+              <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '9px', fontWeight: 400, letterSpacing: '0.22em', color: '#9A8B68', whiteSpace: 'nowrap' }}>
+                PROMOTOR
+              </span>
+              <div className="flex-1 h-px bg-[#9A8B68]/50" />
+            </div>
           </div>
 
           {/* Disclaimer + Divider wrapper — same width */}
