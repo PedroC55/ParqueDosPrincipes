@@ -26,32 +26,13 @@ const translations = {
   },
 };
 
-interface PromotoraSectionProps {
-  interiorImage: string;
-}
-
-export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
+export function PromotoraSection() {
   const [ref, isInView] = useInView({ threshold: 0.15 });
   const { lang } = useLanguage();
   const t = translations[lang];
 
   return (
-    <section id="promotora" ref={ref} className="w-full relative overflow-hidden">
-      {/* Background image */}
-      <img
-        src={interiorImage}
-        alt="Gestão do Condado"
-        className="absolute inset-0 w-full h-full object-cover"
-      />
-
-      {/* Mobile overlay: uniform dark */}
-      <div className="absolute inset-0 lg:hidden" style={{ backgroundColor: 'rgba(0,0,0,0.62)' }} />
-
-      {/* Desktop overlay: gradient left→right */}
-      <div
-        className="absolute inset-0 hidden lg:block"
-        style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.65) 45%, rgba(0,0,0,0.25) 100%)' }}
-      />
+    <section id="promotora" ref={ref} className="w-full relative overflow-hidden" style={{ backgroundColor: '#1c1c1c' }}>
 
       {/* Content */}
       <div className="relative z-10 py-20 lg:py-28 px-6 lg:px-0">
@@ -74,7 +55,7 @@ export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
             </h2>
             <div className="space-y-4">
               {t.paragraphs.map((p, i) => (
-                <p key={i} style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.85', color: 'rgba(255,255,255,0.82)' }}>
+                <p key={i} style={{ fontFamily: 'Lato, sans-serif', fontSize: '13px', lineHeight: '1.85', color: 'rgba(255,255,255,0.75)' }}>
                   {p}
                 </p>
               ))}
@@ -109,7 +90,7 @@ export function PromotoraSection({ interiorImage }: PromotoraSectionProps) {
             </h2>
             <div className="space-y-4">
               {t.paragraphs.map((p, i) => (
-                <p key={i} style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', lineHeight: '1.85', color: 'rgba(255,255,255,0.82)' }}>
+                <p key={i} style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', lineHeight: '1.85', color: 'rgba(255,255,255,0.75)' }}>
                   {p}
                 </p>
               ))}

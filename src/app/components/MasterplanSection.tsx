@@ -11,22 +11,18 @@ const duplexImages = [duplex01, duplex02];
 
 const translations = {
   PT: {
-    title: 'Masterplan',
-    duplexLabel: 'Duplex',
+    title: 'Tipologias',
     features: [
-      'Acesso direto ao jardim',
-      'Ampla iluminação natural',
-      'Vistas panorâmicas',
+      ['Acesso direto ao jardim', 'Vista panorâmica'],
+      ['Ampla iluminação natural', 'Perfeito para famílias'],
     ],
     note: 'Todos os apartamentos com estacionamento coberto garantido.',
   },
   EN: {
-    title: 'Masterplan',
-    duplexLabel: 'Duplex',
+    title: 'Typologies',
     features: [
-      'Direct garden access',
-      'Ample natural lighting',
-      'Panoramic views',
+      ['Direct garden access', 'Panoramic view'],
+      ['Ample natural lighting', 'Perfect for families'],
     ],
     note: 'All apartments with guaranteed covered parking.',
   },
@@ -90,13 +86,13 @@ export function MasterplanSection({ planImage }: MasterplanSectionProps) {
               <img src={parqueLogo} alt="Parque dos Príncipes" className="h-20 w-auto object-contain" />
             </div>
 
-            {/* Masterplan Heading */}
+            {/* Title */}
             <h2
-              className="text-[#C9A84C] mb-6 not-italic"
+              className="text-[#2C2C2C]/50 mb-6 not-italic"
               style={{
                 fontFamily: 'Playfair Display, serif',
                 fontSize: 'clamp(1.6rem, 3vw, 2.2rem)',
-                fontWeight: 600,
+                fontWeight: 400,
               }}
             >
               {t.title}
@@ -105,49 +101,56 @@ export function MasterplanSection({ planImage }: MasterplanSectionProps) {
             {/* Top divider */}
             <div className="w-full h-px bg-[#C9A84C]/30 mb-8" />
 
-            {/* Typology — Duplex */}
-            <div className="flex flex-col items-center w-full mb-8">
-              <p
-                className="text-[#C9A84C] uppercase tracking-widest mb-4"
-                style={{ fontFamily: 'Lato, sans-serif', fontSize: '10px', fontWeight: 700, letterSpacing: '0.2em' }}
-              >
-                {t.duplexLabel}
-              </p>
-              <div className="flex items-center justify-center w-full gap-0">
-                <div className="flex-1 flex justify-end pr-6">
+            {/* Row 1: T2 | T1 | T3 */}
+            <div className="flex items-center justify-center w-full gap-0 mb-4">
+              {['T2', 'T1', 'T3'].map((typ, i) => (
+                <div key={typ} className="flex items-center">
+                  {i > 0 && <div className="w-px h-7 bg-[#C9A84C]/30 mx-5" />}
                   <span
                     className="text-[#2C2C2C]"
                     style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', fontWeight: 500 }}
                   >
-                    T2 Duplex +1
+                    {typ}
                   </span>
                 </div>
-                <div className="w-px self-stretch bg-[#C9A84C]/40" />
-                <div className="flex-1 flex justify-start pl-6">
-                  <button
-                    onClick={() => setDuplexLightbox(0)}
-                    className="text-[#C9A84C] underline underline-offset-2 hover:text-[#a8873a] transition-colors cursor-pointer"
-                    style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', fontWeight: 500 }}
-                  >
-                    T3 Duplex +1
-                  </button>
-                </div>
-              </div>
+              ))}
+            </div>
+
+            {/* Row 2: T2 Duplex +1 | T3 Duplex +1 */}
+            <div className="flex items-center justify-center w-full gap-0 mb-8">
+              <span
+                className="text-[#2C2C2C]"
+                style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', fontWeight: 500 }}
+              >
+                T2 Duplex +1
+              </span>
+              <div className="w-px h-7 bg-[#C9A84C]/30 mx-5" />
+              <button
+                onClick={() => setDuplexLightbox(0)}
+                className="text-[#C9A84C] hover:text-[#a8873a] transition-colors cursor-pointer"
+                style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', fontWeight: 500 }}
+              >
+                T3 Duplex +1
+              </button>
             </div>
 
             {/* Bottom divider */}
             <div className="w-full h-px bg-[#C9A84C]/30 mb-8" />
 
-            {/* Features */}
-            <div className="mb-8 space-y-1">
-              {t.features.map((f) => (
-                <p
-                  key={f}
-                  className="text-[#2C2C2C]/65"
-                  style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', lineHeight: '1.9' }}
-                >
-                  {f}
-                </p>
+            {/* Features — 2 columns */}
+            <div className="mb-8 w-full">
+              {t.features.map((row, i) => (
+                <div key={i} className="flex justify-center gap-8 mb-1">
+                  {row.map((f) => (
+                    <p
+                      key={f}
+                      className="text-[#2C2C2C]/65 w-[160px] text-center"
+                      style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px', lineHeight: '1.9' }}
+                    >
+                      {f}
+                    </p>
+                  ))}
+                </div>
               ))}
             </div>
 

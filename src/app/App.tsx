@@ -61,7 +61,7 @@ export default function App() {
 
       <MasterplanSection planImage={imgMasterplan} />
 
-      <PromotoraSection interiorImage={imgSalaoJogos} />
+      <PromotoraSection />
       
       <ContactsSection />
       
