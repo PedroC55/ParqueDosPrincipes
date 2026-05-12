@@ -43,7 +43,7 @@ export function Footer() {
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
           {/* Promotor — Gestão do Condado, centrado e isolado */}
           <div className="flex flex-col items-center gap-6 mb-10">
-            <img src={gestaoLogo} alt="Gestão do Condado" className="h-24 w-auto object-contain" style={{ transform: 'translateX(12px)' }} />
+            <img src={gestaoLogo} alt="Gestão do Condado" className="h-24 w-auto object-contain" />
             <div className="flex items-center gap-3 w-36">
               <div className="flex-1 h-px bg-[#9A8B68]/50" />
               <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '9px', fontWeight: 400, letterSpacing: '0.22em', color: '#9A8B68', whiteSpace: 'nowrap' }}>
