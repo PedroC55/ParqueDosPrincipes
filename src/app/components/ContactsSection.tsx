@@ -106,6 +106,15 @@ export function ContactsSection() {
           {/* Contact Info */}
           <div className="text-[#2C2C2C]/70 mb-12 flex flex-col items-center gap-3">
             <a
+              href="https://www.google.com/maps?q=-8.957226,13.226919"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px' }}
+              className="hover:text-[#C9A84C] transition-colors duration-200"
+            >
+              -8.957226, 13.226919
+            </a>
+            <a
               href="mailto:parquedosprincipesresidence@gmail.com"
               style={{ fontFamily: 'Lato, sans-serif', fontSize: '14px' }}
               className="hover:text-[#C9A84C] transition-colors duration-200"
